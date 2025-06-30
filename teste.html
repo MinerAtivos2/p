@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="ad.size" content="width=300,height=250">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Banner Tecnológico com Hexágonos</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      background: #0f0f0f;
+      font-family: Arial, sans-serif;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .banner-content {
+      position: relative;
+      z-index: 1;
+      color: #00ffff;
+      text-align: center;
+      top: 40%;
+      transform: translateY(-50%);
+    }
+
+    .banner-content h1 {
+      font-size: 3em;
+      margin: 0;
+      color: #ccc;
+    }
+
+    .banner-content p {
+      font-size: 1.2em;
+      color: #00ffff;
+    }
+	
+	/* Adicione isso no <style> */
+.cube-container {
+  margin-top: 120px;
+  width: 200px;
+  height: 200px;
+  perspective: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotateCube 10s infinite linear;
+}
+
+.face {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: #111;
+  border: 1px solid #00ffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+.front  { transform: rotateY(  0deg) translateZ(100px); }
+.back   { transform: rotateY(180deg) translateZ(100px); }
+.left   { transform: rotateY(-90deg) translateZ(100px); }
+.right  { transform: rotateY( 90deg) translateZ(100px); }
+
+@keyframes rotateCube {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+}
+
+
+  </style>
+</head>
+<body>
+  <canvas id="techCanvas"></canvas>
+
+  <div class="banner-content">
+    <h1>Bem-vindo ao Futuro</h1>
+    <p>Tecnologia e inovação em movimento</p>
+  </div>
+<br><br>
+<br><br>
+<br><br>
+
+<!-- Adicione isso dentro do <body>, depois do canvas e antes do </body> -->
+<div class="cube-container">
+  <div class="cube">
+    <div class="face front"><img src="card_3C_limite_960x1200.png" alt="Frente"></div>
+    <div class="face back"><img src="card_4C_limite_960x1200.png" alt="Trás"></div>
+    <div class="face left"><img src="card_5C_limite_960x1200 - Copia.png" alt="Esquerda"></div>
+    <div class="face right"><img src="card_5C_limite_960x1200.png" alt="Direita"></div>
+  </div>
+</div>
+
+
+
+  <script>
+    const canvas = document.getElementById('techCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ['#00ffff', '#00ff99', '#3399ff'];
+    const particles = [];
+
+    for (let i = 0; i < 100; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 6 + 4,
+        dx: (Math.random() - 0.5) * 1.5,
+        dy: (Math.random() - 0.5) * 1.5,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      });
+    }
+
+    function drawHexagon(x, y, radius, color) {
+      const sides = 6;
+      ctx.beginPath();
+      for (let i = 0; i <= sides; i++) {
+        const angle = (Math.PI / 3) * i;
+        const px = x + radius * Math.cos(angle);
+        const py = y + radius * Math.sin(angle);
+        if (i === 0) {
+          ctx.moveTo(px, py);
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    function animate() {
+      ctx.fillStyle = 'rgba(15, 15, 15, 0.5)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(p => {
+        p.x += p.dx;
+        p.y += p.dy;
+
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+
+        drawHexagon(p.x, p.y, p.radius, p.color);
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
