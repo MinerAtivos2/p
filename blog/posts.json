@@ -4,7 +4,7 @@
     "title": "Meu Primeiro Post Incrível!",
     "description": "Este é o conteúdo do meu primeiro post. Ele fala sobre como é fácil começar um blog.",
     "imageUrl": "assets/ABEV3_chartseries.png",
-    "path": "posts/post1.html"
+    "path": "posts/2025-08-22-teste.html"
   },
   {
     "id": "post2",
@@ -22,4 +22,5 @@
     "path": "posts/post2.html"
   }
   
+
 ]
