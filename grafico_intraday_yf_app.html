@@ -2,9 +2,8 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <title>Yahoo Finance – OHLC + Indicadores (GitHub Pages)</title>
+  <title>MinerAtivos - consulta indicadores</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  https://www.gstatic.com/charts/loader.js</script>
   <style>
     :root { --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#9ca3af; --accent:#22c55e; --danger:#ef4444; --neutral:#6b7280; --border:#1f2937; }
     * { box-sizing: border-box; }
@@ -14,19 +13,24 @@
     .header { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:16px; }
     .title { font-size:20px; font-weight:600; letter-spacing:0.2px; margin-right:auto; }
     .status { font-size:12px; color:var(--muted); }
-    .card { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)); border:1px solid var(--border); border-radius:12px; padding:16px; backdrop-filter: blur(6px); box-shadow: 0 10px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04); }
+    .error { color: var(--danger); font-weight:600; }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+      border:1px solid var(--border); border-radius:12px; padding:16px; backdrop-filter: blur(6px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04); }
     .controls { display:grid; grid-template-columns: repeat(12, 1fr); gap:10px; align-items:center; }
-    .input { grid-column: span 3; display:flex; gap:8px; align-items:center; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px 12px; color:var(--text); min-height:42px; }
+    .input { grid-column: span 3; display:flex; gap:8px; align-items:center; background:var(--card); border:1px solid var(--border);
+      border-radius:10px; padding:10px 12px; color:var(--text); min-height:42px; }
     .input label { font-size:12px; color:var(--muted); margin-right:6px; }
     .input input, .input select { background:transparent; border:none; outline:none; color:var(--text); width:100%; font-size:14px; }
     .input.small { grid-column: span 2; }
-    .btn { grid-column: span 2; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1px solid var(--border); border-radius:10px; padding:10px 14px; cursor:pointer; font-weight:600; color:var(--text); background: linear-gradient(180deg, #0ea5e9, #0284c7); box-shadow: 0 6px 14px rgba(2,132,199,0.35); min-height:42px; }
+    .btn { grid-column: span 2; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1px solid var(--border);
+      border-radius:10px; padding:10px 14px; cursor:pointer; font-weight:600; color:var(--text);
+      background: linear-gradient(180deg, #0ea5e9, #0284c7); box-shadow: 0 6px 14px rgba(2,132,199,0.35); min-height:42px; }
     .btn:disabled { opacity:.6; cursor:not-allowed; }
     .grid { display:grid; grid-template-columns: 1fr; gap:16px; margin-top:16px; }
     @media (min-width:1100px) { .grid { grid-template-columns: 2fr 1fr; } }
     .chart { width:100%; height:420px; }
     .chart.small { height:300px; }
-    .error { color: var(--danger); font-weight:600; }
     .foot { margin-top:12px; font-size:12px; color:var(--muted); }
     code { color:#93c5fd; }
   </style>
@@ -35,7 +39,7 @@
   <div class="container">
     <div class="header">
       <div class="title">Yahoo Finance – OHLC + Indicadores</div>
-      <div class="status" id="status">Pronto</div>
+      <div class="status" id="status">Inicializando…</div>
     </div>
 
     <div class="card">
@@ -67,7 +71,7 @@
         <div class="input small"><label for="macds">MACD S</label><input id="macds" type="number" min="2" step="1" value="26" title="MACD lento"></div>
         <div class="input small"><label for="macdsig">SIG</label><input id="macdsig" type="number" min="2" step="1" value="9" title="Sinal MACD"></div>
 
-        <button id="btnLoad" class="btn">Atualizar gráficos</button>
+        <button id="btnLoad" class="btn" type="button">Atualizar gráficos</button>
       </div>
     </div>
 
@@ -103,96 +107,25 @@
     </div>
   </div>
 
+  <!-- ===================== CONFIGURAÇÕES ===================== -->
   <script>
-    // ====== CONFIGURE AQUI ======
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxLfLGTX56nRb_7KjyFM8qyf3tGRiXkXK4XMPgRaKMWmkimZj1B5H51UKUuGiDck9-irw/exec';
-    const USE_JSONP_ONLY = true; // mantenha true para evitar CORS.
-    // ============================
+    // Cole AQUI a URL do seu Apps Script Web App (terminando em /exec)
+    const WEB_APP_URL    = 'https://script.google.com/macros/s/AKfycbxLfLGTX56nRb_7KjyFM8qyf3tGRiXkXK4XMPgRaKMWmkimZj1B5H51UKUuGiDck9-irw/exec';
+    const USE_JSONP_ONLY = true; // mantenha true para evitar CORS (funciona até via file://)
+  </script>
 
-    google.charts.load('current', { packages: ['corechart'] });
-
-    const elStatus = document.getElementById('status');
-    const elTicker = document.getElementById('ticker');
-    const elRange = document.getElementById('range');
-    const elInterval = document.getElementById('interval');
-    const elTTL = document.getElementById('ttl');
-    const elSMA = document.getElementById('sma');
-    const elEMA = document.getElementById('ema');
-    const elRSI = document.getElementById('rsi');
-    const elMACDF = document.getElementById('macdf');
-    const elMACDS = document.getElementById('macds');
-    const elMACDSig = document.getElementById('macdsig');
-    const elBtn = document.getElementById('btnLoad');
-
+  <!-- ============ APP: INJEÇÃO DO LOADER + LÓGICA PRINCIPAL ============ -->
+  <script>
+    // --- Estado para redesenho ---
     let lastPayload = null;
     let resizeScheduled = false;
 
+    // --- Utilitários UI/Charts ---
     function setStatus(msg, isError = false) {
-      elStatus.textContent = msg;
-      elStatus.classList.toggle('error', isError);
+      const el = document.getElementById('status');
+      el.textContent = msg;
+      el.classList.toggle('error', isError);
     }
-
-    function buildUrl() {
-      const params = new URLSearchParams({
-        ativo: (elTicker.value || '').trim(),
-        range: elRange.value || '1mo',
-        interval: elInterval.value || '1d',
-        ttlSeconds: String(Number(elTTL.value || 1800)),
-        sma: String(Number(elSMA.value || 20)),
-        ema: String(Number(elEMA.value || 20)),
-        rsi: String(Number(elRSI.value || 14)),
-        macdf: String(Number(elMACDF.value || 12)),
-        macds: String(Number(elMACDS.value || 26)),
-        macdsig: String(Number(elMACDSig.value || 9)),
-        tz: 'utc' // mude para 'asset' se quiser horário do ativo
-      });
-      return `${WEB_APP_URL}?${params.toString()}`;
-    }
-
-    // JSONP helper (evita CORS)
-    function jsonp(url, timeout = 15000) {
-      return new Promise((resolve, reject) => {
-        const cbName = 'jsonp_cb_' + Math.random().toString(36).slice(2);
-        const script = document.createElement('script');
-        let timer = null;
-
-        window[cbName] = (data) => {
-          cleanup();
-          resolve(data);
-        };
-
-        function cleanup() {
-          if (timer) clearTimeout(timer);
-          delete window[cbName];
-          if (script && script.parentNode) script.parentNode.removeChild(script);
-        }
-
-        script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
-        script.onerror = () => { cleanup(); reject(new Error('JSONP load error')); };
-        document.body.appendChild(script);
-
-        timer = setTimeout(() => {
-          cleanup();
-          reject(new Error('JSONP timeout'));
-        }, timeout);
-      });
-    }
-
-    async function fetchData() {
-      const url = buildUrl();
-      if (USE_JSONP_ONLY) {
-        return jsonp(url);
-      }
-      // Tenta fetch normal; se CORS bloquear, cai no JSONP
-      try {
-        const res = await fetch(url, { method: 'GET' });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        return await res.json();
-      } catch (_) {
-        return jsonp(url);
-      }
-    }
-
     function num(v) { const n = Number(v); return isFinite(n) ? n : null; }
     function commonOptions(title) {
       return {
@@ -206,13 +139,50 @@
         crosshair: { trigger: 'both', color: '#64748b', opacity: 0.8 }
       };
     }
+    function buildUrl() {
+      const ticker   = document.getElementById('ticker').value.trim();
+      const range    = document.getElementById('range').value || '1mo';
+      const interval = document.getElementById('interval').value || '1d';
+      const ttl      = Number(document.getElementById('ttl').value || 1800);
+      const sma      = Number(document.getElementById('sma').value || 20);
+      const ema      = Number(document.getElementById('ema').value || 20);
+      const rsi      = Number(document.getElementById('rsi').value || 14);
+      const macdf    = Number(document.getElementById('macdf').value || 12);
+      const macds    = Number(document.getElementById('macds').value || 26);
+      const macdsig  = Number(document.getElementById('macdsig').value || 9);
 
+      const params = new URLSearchParams({
+        ativo: ticker, range, interval, ttlSeconds: String(ttl),
+        sma: String(sma), ema: String(ema), rsi: String(rsi),
+        macdf: String(macdf), macds: String(macds), macdsig: String(macdsig),
+        tz: 'utc'
+      });
+      return `${WEB_APP_URL}?${params.toString()}`;
+    }
+    function jsonp(url, timeout = 15000) {
+      return new Promise((resolve, reject) => {
+        const cbName = 'jsonp_cb_' + Math.random().toString(36).slice(2);
+        const s = document.createElement('script');
+        let timer = setTimeout(() => { cleanup(); reject(new Error('JSONP timeout')); }, timeout);
+        function cleanup() {
+          if (timer) clearTimeout(timer);
+          delete window[cbName];
+          if (s.parentNode) s.parentNode.removeChild(s);
+        }
+        window[cbName] = (data) => { cleanup(); resolve(data); };
+        s.onerror = () => { cleanup(); reject(new Error('JSONP load error')); };
+        s.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+        document.body.appendChild(s);
+      });
+    }
+
+    // --- Desenho dos gráficos ---
     function drawAll(obj, ativo) {
       lastPayload = { obj, ativo };
 
-      const header = obj.header;
-      const rows = obj.rows;
-      if (!header || !rows || !rows.length) {
+      const header = obj.header || [];
+      const rows = obj.rows || [];
+      if (!header.length || !rows.length) {
         setStatus('Sem dados retornados.', true);
         return;
       }
@@ -224,7 +194,6 @@
       const idxClose= header.indexOf('Close');
       const idxVol  = header.indexOf('Volume');
       const idxIndicator = header.indexOf('indicador');
-
       const idxSMA = header.findIndex(h => /^SMA_/.test(h));
       const idxEMA = header.findIndex(h => /^EMA_/.test(h));
       const idxRSI = header.findIndex(h => /^RSI_/.test(h));
@@ -232,52 +201,46 @@
       const idxSignal = header.indexOf('Signal');
       const idxHist = header.indexOf('Hist');
 
-      // ----- Candlestick -----
-      (function drawCandle() {
+      // Candlestick
+      (function drawCandle(){
         const dt = new google.visualization.DataTable();
         dt.addColumn('datetime', 'Data');
         dt.addColumn('number', 'Low');
         dt.addColumn('number', 'Open');
         dt.addColumn('number', 'Close');
         dt.addColumn('number', 'High');
-        rows.forEach(r => {
-          const d = new Date(r[idxDate]);
-          dt.addRow([d, num(r[idxLow]), num(r[idxOpen]), num(r[idxClose]), num(r[idxHigh])]);
-        });
+        rows.forEach(r => dt.addRow([new Date(r[idxDate]), num(r[idxLow]), num(r[idxOpen]), num(r[idxClose]), num(r[idxHigh])]));
         const options = commonOptions(`Candlestick – ${ativo}`);
         options.candlestick = { fallingColor: { strokeWidth: 1, fill: '#ef4444' }, risingColor: { strokeWidth: 1, fill: '#22c55e' } };
-        options.legend = 'none';
         new google.visualization.CandlestickChart(document.getElementById('candleChart')).draw(dt, options);
       })();
 
-      // ----- Volume -----
-      (function drawVolume() {
+      // Volume
+      (function drawVolume(){
         const dt = new google.visualization.DataTable();
         dt.addColumn('datetime', 'Data');
         dt.addColumn('number', 'Volume');
         dt.addColumn({ type: 'string', role: 'style' });
         const upColor='#22c55e', downColor='#ef4444', flatColor='#6b7280';
         rows.forEach(r => {
-          const d = new Date(r[idxDate]);
           const ind = Number(r[idxIndicator] ?? 0);
           const color = ind > 0 ? upColor : (ind < 0 ? downColor : flatColor);
-          dt.addRow([d, num(r[idxVol]), `color: ${color}`]);
+          dt.addRow([new Date(r[idxDate]), num(r[idxVol]), `color: ${color}`]);
         });
         const options = commonOptions(`Volume – ${ativo}`);
         options.legend = 'none'; options.bar = { groupWidth: '90%' };
         new google.visualization.ColumnChart(document.getElementById('volumeChart')).draw(dt, options);
       })();
 
-      // ----- Preço (Close + SMA/EMA) -----
-      (function drawPrice() {
+      // Preço (Close + SMA/EMA)
+      (function drawPrice(){
         const dt = new google.visualization.DataTable();
         dt.addColumn('datetime', 'Data');
         dt.addColumn('number', 'Close');
         if (idxSMA >= 0) dt.addColumn('number', header[idxSMA]);
         if (idxEMA >= 0) dt.addColumn('number', header[idxEMA]);
         rows.forEach(r => {
-          const d = new Date(r[idxDate]);
-          const arr = [d, num(r[idxClose])];
+          const arr = [new Date(r[idxDate]), num(r[idxClose])];
           if (idxSMA >= 0) arr.push(num(r[idxSMA]));
           if (idxEMA >= 0) arr.push(num(r[idxEMA]));
           dt.addRow(arr);
@@ -289,8 +252,8 @@
         new google.visualization.LineChart(document.getElementById('priceChart')).draw(dt, options);
       })();
 
-      // ----- RSI -----
-      (function drawRSI() {
+      // RSI
+      (function drawRSI(){
         if (idxRSI < 0) return;
         const dt = new google.visualization.DataTable();
         dt.addColumn('datetime', 'Data');
@@ -309,8 +272,8 @@
         new google.visualization.LineChart(document.getElementById('rsiChart')).draw(dt, options);
       })();
 
-      // ----- MACD -----
-      (function drawMACD() {
+      // MACD
+      (function drawMACD(){
         if (idxMACD < 0 || idxSignal < 0 || idxHist < 0) return;
         const dt = new google.visualization.DataTable();
         dt.addColumn('datetime', 'Data');
@@ -334,18 +297,37 @@
       resizeScheduled = true;
       setTimeout(() => {
         resizeScheduled = false;
-        if (lastPayload) drawAll(lastPayload.obj, lastPayload.ativo);
+        if (lastPayload) {
+          const { obj, ativo } = lastPayload;
+          drawAll(obj, ativo);
+        }
       }, 150);
     }
     window.addEventListener('resize', scheduleResize);
 
     async function fetchAndDraw() {
-      const ticker = (elTicker.value || '').trim();
+      const ticker = (document.getElementById('ticker').value || '').trim();
       if (!ticker) { setStatus('Informe um ticker válido.', true); return; }
       setStatus(`Buscando dados de ${ticker}...`);
-      elBtn.disabled = true;
+      const btn = document.getElementById('btnLoad');
+      btn.disabled = true;
+
       try {
-        const obj = await fetchData();
+        const url = buildUrl();
+        let obj;
+        if (USE_JSONP_ONLY) {
+          obj = await jsonp(url);
+        } else {
+          // tenta fetch normal, cai no JSONP em caso de CORS
+          try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            obj = await res.json();
+          } catch (_) {
+            obj = await jsonp(url);
+          }
+        }
+
         if (obj && obj.error) {
           setStatus(obj.message || 'Erro ao consultar dados.', true);
           return;
@@ -357,12 +339,34 @@
         console.error(err);
         setStatus('Falha ao buscar dados (verifique o Web App URL ou parâmetros).', true);
       } finally {
-        elBtn.disabled = false;
+        btn.disabled = false;
       }
     }
 
-    document.getElementById('btnLoad').addEventListener('click', fetchAndDraw);
-    google.charts.setOnLoadCallback(fetchAndDraw);
+    // --- Injeção do loader e bootstrap da app ---
+    (function injectChartsLoader() {
+      const s = document.createElement('script');
+      s.src = 'https://www.gstatic.com/charts/loader.js';
+      s.async = true;
+      s.onload = () => {
+        if (!window.google || !google.charts) {
+          setStatus('Loader carregado, mas google.charts indisponível.', true);
+          return;
+        }
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(() => {
+          // Liga listeners agora que Charts está pronto
+          const btn = document.getElementById('btnLoad');
+          if (!btn) { setStatus('Botão #btnLoad não encontrado.', true); return; }
+          btn.addEventListener('click', fetchAndDraw);
+          setStatus('Pronto');
+          // Busca inicial automática
+          fetchAndDraw();
+        });
+      };
+      s.onerror = () => setStatus('ERRO ao carregar https://www.gstatic.com/charts/loader.js (rede/ambiente pode estar bloqueando).', true);
+      document.head.appendChild(s);
+    })();
   </script>
 </body>
 </html>
