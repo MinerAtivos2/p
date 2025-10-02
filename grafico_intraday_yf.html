@@ -163,6 +163,15 @@
             display: none;
         }
         
+        .info {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        
         .suggestions {
             background: #f0f4ff;
             padding: 15px;
@@ -197,6 +206,25 @@
             background: #667eea;
             color: white;
         }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .warning-box h3 {
+            color: #856404;
+            margin-bottom: 8px;
+        }
+
+        .warning-box p {
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -204,6 +232,11 @@
         <h1>📈 Análise Intraday de Ações</h1>
         <p class="subtitle">Visualize negociações e identifique outliers em tempo real</p>
         
+        <div class="warning-box">
+            <h3>⚠️ Atenção: Limitações de APIs Públicas</h3>
+            <p>Esta aplicação usa APIs públicas que podem ter limitações. Se encontrar erros frequentes, recomendamos usar dados simulados (botão abaixo) ou implementar um backend próprio.</p>
+        </div>
+
         <div class="input-group">
             <div class="input-wrapper">
                 <label for="ticker">Símbolo da Ação:</label>
@@ -219,8 +252,9 @@
                     <option value="60m">60 minutos</option>
                 </select>
             </div>
-            <div class="input-wrapper" style="display: flex; align-items: flex-end;">
+            <div class="input-wrapper" style="display: flex; align-items: flex-end; gap: 10px;">
                 <button onclick="fetchData()" id="fetchBtn">Analisar</button>
+                <button onclick="useDemoData()" style="background: linear-gradient(135deg, #43a047 0%, #66bb6a 100%);">Demo</button>
             </div>
         </div>
         
@@ -234,16 +268,16 @@
                 <span class="ticker-tag" onclick="setTicker('AAPL')">AAPL</span>
                 <span class="ticker-tag" onclick="setTicker('MSFT')">MSFT</span>
                 <span class="ticker-tag" onclick="setTicker('GOOGL')">GOOGL</span>
-                <span class="ticker-tag" onclick="setTicker('^BVSP')">^BVSP (Ibovespa)</span>
             </div>
         </div>
         
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Carregando dados...</p>
+            <p id="loadingText">Carregando dados...</p>
         </div>
         
         <div class="error" id="error"></div>
+        <div class="info" id="info"></div>
         
         <div class="stats" id="stats"></div>
         
@@ -259,6 +293,43 @@
             document.getElementById('ticker').value = ticker;
             fetchData();
         }
+
+        function useDemoData() {
+            const ticker = document.getElementById('ticker').value.trim().toUpperCase() || 'DEMO';
+            showInfo('Usando dados simulados para demonstração');
+            
+            // Gerar dados simulados realistas
+            const now = new Date();
+            const dataPoints = 50;
+            const timestamps = [];
+            const prices = [];
+            const basePrice = 25.50;
+            
+            for (let i = 0; i < dataPoints; i++) {
+                const time = new Date(now.getTime() - (dataPoints - i) * 5 * 60000);
+                timestamps.push(Math.floor(time.getTime() / 1000));
+                
+                // Gerar preços com variação aleatória e alguns outliers
+                let price = basePrice + (Math.random() - 0.5) * 2;
+                
+                // Adicionar outliers ocasionais
+                if (Math.random() > 0.92) {
+                    price = basePrice + (Math.random() > 0.5 ? 3 : -3);
+                }
+                
+                prices.push(parseFloat(price.toFixed(2)));
+            }
+            
+            const pricesData = {
+                close: prices,
+                open: prices.map(p => p + (Math.random() - 0.5) * 0.5),
+                high: prices.map(p => p + Math.random() * 0.8),
+                low: prices.map(p => p - Math.random() * 0.8),
+                volume: Array(dataPoints).fill(0).map(() => Math.floor(Math.random() * 1000000 + 500000))
+            };
+            
+            processData(timestamps, pricesData, ticker);
+        }
         
         async function fetchData() {
             const ticker = document.getElementById('ticker').value.trim().toUpperCase();
@@ -270,38 +341,82 @@
             }
             
             document.getElementById('loading').style.display = 'block';
+            document.getElementById('loadingText').textContent = 'Carregando dados...';
             document.getElementById('error').style.display = 'none';
+            document.getElementById('info').style.display = 'none';
             document.getElementById('chartContainer').style.display = 'none';
             document.getElementById('stats').style.display = 'none';
             document.getElementById('fetchBtn').disabled = true;
             
-            try {
-                const proxyUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/';
-                const url = `${proxyUrl}${ticker}?interval=${interval}&range=1d`;
-                
-                const response = await fetch(url);
-                const data = await response.json();
-                
-                if (data.chart.error) {
-                    throw new Error(data.chart.error.description);
+            // Lista de proxies para tentar
+            const proxies = [
+                (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+                (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+                (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`
+            ];
+            
+            const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=${interval}&range=1d`;
+            
+            for (let i = 0; i < proxies.length; i++) {
+                try {
+                    document.getElementById('loadingText').textContent = `Tentando conexão ${i + 1}/${proxies.length}...`;
+                    
+                    const proxyUrl = proxies[i](yahooUrl);
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 15000);
+                    
+                    const response = await fetch(proxyUrl, {
+                        signal: controller.signal,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data.chart && data.chart.error) {
+                        throw new Error(data.chart.error.description || 'Símbolo inválido');
+                    }
+                    
+                    if (!data.chart || !data.chart.result || data.chart.result.length === 0) {
+                        throw new Error('Nenhum dado retornado');
+                    }
+                    
+                    const result = data.chart.result[0];
+                    const timestamps = result.timestamp;
+                    const prices = result.indicators.quote[0];
+                    
+                    if (!timestamps || timestamps.length === 0) {
+                        throw new Error('Nenhum dado disponível para este período');
+                    }
+                    
+                    processData(timestamps, prices, ticker);
+                    return;
+                    
+                } catch (error) {
+                    console.error(`Proxy ${i + 1} falhou:`, error);
+                    
+                    if (i === proxies.length - 1) {
+                        showError(`Não foi possível obter dados da API. Erro: ${error.message}. 
+                        
+                        Possíveis soluções:
+                        • Clique em "Demo" para ver dados simulados
+                        • Verifique se o símbolo está correto
+                        • Tente novamente em alguns minutos
+                        • Ações brasileiras precisam do sufixo .SA
+                        • Alguns ativos só têm dados em horário de mercado`);
+                    }
                 }
-                
-                const result = data.chart.result[0];
-                const timestamps = result.timestamp;
-                const prices = result.indicators.quote[0];
-                
-                if (!timestamps || timestamps.length === 0) {
-                    throw new Error('Nenhum dado disponível para este símbolo no período selecionado.');
-                }
-                
-                processData(timestamps, prices, ticker);
-                
-            } catch (error) {
-                showError(`Erro ao buscar dados: ${error.message}. Verifique o símbolo e tente novamente.`);
-            } finally {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('fetchBtn').disabled = false;
             }
+            
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('fetchBtn').disabled = false;
         }
         
         function processData(timestamps, prices, ticker) {
@@ -310,8 +425,15 @@
                 return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             });
             
-            const closePrices = prices.close.filter(p => p !== null);
-            const volumes = prices.volume.filter(v => v !== null);
+            const closePrices = prices.close.filter(p => p !== null && !isNaN(p));
+            const volumes = prices.volume.filter(v => v !== null && !isNaN(v));
+            
+            if (closePrices.length === 0) {
+                showError('Dados insuficientes para análise.');
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('fetchBtn').disabled = false;
+                return;
+            }
             
             const mean = closePrices.reduce((a, b) => a + b, 0) / closePrices.length;
             const variance = closePrices.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / closePrices.length;
@@ -322,7 +444,7 @@
             const colors = [];
             
             prices.close.forEach((price, index) => {
-                if (price !== null) {
+                if (price !== null && !isNaN(price)) {
                     const zScore = Math.abs((price - mean) / stdDev);
                     if (zScore > threshold) {
                         outliers.push({ index, price, time: labels[index] });
@@ -337,6 +459,9 @@
             
             displayStats(closePrices, volumes, outliers, ticker);
             renderChart(labels, prices.close, colors, outliers, ticker);
+            
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('fetchBtn').disabled = false;
         }
         
         function displayStats(prices, volumes, outliers, ticker) {
@@ -344,7 +469,7 @@
             const max = Math.max(...prices);
             const current = prices[prices.length - 1];
             const change = ((current - prices[0]) / prices[0] * 100).toFixed(2);
-            const avgVolume = (volumes.reduce((a, b) => a + b, 0) / volumes.length).toFixed(0);
+            const avgVolume = volumes.length > 0 ? (volumes.reduce((a, b) => a + b, 0) / volumes.length).toFixed(0) : 'N/A';
             
             const statsHtml = `
                 <div class="stat-card">
@@ -416,6 +541,7 @@
                             callbacks: {
                                 label: function(context) {
                                     const price = context.parsed.y;
+                                    if (price === null || isNaN(price)) return 'Sem dados';
                                     const isOutlier = colors[context.dataIndex] === 'rgba(255, 99, 132, 0.8)';
                                     return `Preço: R$ ${price.toFixed(2)}${isOutlier ? ' ⚠️ OUTLIER' : ''}`;
                                 }
@@ -445,8 +571,13 @@
         }
         
         function showError(message) {
-            document.getElementById('error').textContent = message;
+            document.getElementById('error').innerHTML = message.replace(/\n/g, '<br>');
             document.getElementById('error').style.display = 'block';
+        }
+
+        function showInfo(message) {
+            document.getElementById('info').textContent = message;
+            document.getElementById('info').style.display = 'block';
         }
         
         document.getElementById('ticker').addEventListener('keypress', function(e) {
