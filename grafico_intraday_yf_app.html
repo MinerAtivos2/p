@@ -7,8 +7,9 @@
   <style>
     :root { --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#9ca3af; --accent:#22c55e; --danger:#ef4444; --neutral:#6b7280; --border:#1f2937; }
     * { box-sizing: border-box; }
-    body { margin:0; padding:24px; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    body { margin:0; padding:12px; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       color:var(--text); background: radial-gradient(1200px 600px at 10% 0%, #111827, #0b1022), linear-gradient(120deg, #0f172a, #0b1022); min-height:100vh; }
+    @media (min-width: 640px) { body { padding: 24px; } }
     .container { max-width: 1320px; margin: 0 auto; }
     .header { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:16px; }
     .title { font-size:20px; font-weight:600; letter-spacing:0.2px; margin-right:auto; }
@@ -17,15 +18,20 @@
     .card { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
       border:1px solid var(--border); border-radius:12px; padding:16px; backdrop-filter: blur(6px);
       box-shadow: 0 10px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04); }
-    .controls { display:grid; grid-template-columns: repeat(12, 1fr); gap:10px; align-items:center; }
-    .input { grid-column: span 3; display:flex; gap:8px; align-items:center; background:var(--card); border:1px solid var(--border);
+
+    .controls { display:flex; flex-wrap:wrap; gap:10px; align-items:stretch; }
+    .input { flex-grow:1; display:flex; gap:8px; align-items:center; background:var(--card); border:1px solid var(--border);
       border-radius:10px; padding:10px 12px; color:var(--text); min-height:42px; }
     .input label { font-size:12px; color:var(--muted); margin-right:6px; }
     .input input, .input select { background:transparent; border:none; outline:none; color:var(--text); width:100%; font-size:14px; }
-    .input.small { grid-column: span 2; }
-    .btn { grid-column: span 2; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1px solid var(--border);
+    .input:nth-child(1) { min-width: 220px; } /* Ticker */
+    .input:nth-child(2), .input:nth-child(3), .input:nth-child(4) { min-width: 180px; } /* Range, Interval, Cache */
+    .input.small { min-width: 120px; } /* SMA, EMA, etc. */
+    .btn { flex-grow:1; min-width:220px; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1px solid var(--border);
       border-radius:10px; padding:10px 14px; cursor:pointer; font-weight:600; color:var(--text);
       background: linear-gradient(180deg, #0ea5e9, #0284c7); box-shadow: 0 6px 14px rgba(2,132,199,0.35); min-height:42px; }
+    @media (min-width: 1400px) { .btn { max-width: 250px; } }
+
     .btn:disabled { opacity:.6; cursor:not-allowed; }
     .grid { display:grid; grid-template-columns: 1fr; gap:16px; margin-top:16px; }
     @media (min-width:1100px) { .grid { grid-template-columns: 2fr 1fr; } }
