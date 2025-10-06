@@ -127,6 +127,10 @@
     let resizeScheduled = false;
 
     // --- Utilitários UI/Charts ---
+    function isMobileDevice() {
+      // Heurística simples para detectar dispositivos com tela de toque
+      return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    }
     function setStatus(msg, isError = false) {
       const el = document.getElementById('status');
       el.textContent = msg;
@@ -254,7 +258,9 @@
         const options = commonOptions(`Preço – ${ativo}`);
         options.legend = { position: 'top', textStyle: { color: '#e5e7eb' } };
         options.colors = ['#60a5fa', '#f59e0b', '#10b981'];
-        options.explorer = { axis: 'horizontal', keepInBounds: true, maxZoomIn: 8.0 };
+        if (!isMobileDevice()) {
+          options.explorer = { axis: 'horizontal', keepInBounds: true, maxZoomIn: 8.0 };
+        }
         new google.visualization.LineChart(document.getElementById('priceChart')).draw(dt, options);
       })();
 
