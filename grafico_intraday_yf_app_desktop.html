@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>MinerAtivos - consulta indicadores</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#9ca3af; --accent:#22c55e; --danger:#ef4444; --neutral:#6b7280; --border:#1f2937; }
+    * { box-sizing: border-box; }
+    body { margin:0; padding:12px; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text); background: radial-gradient(1200px 600px at 10% 0%, #111827, #0b1022), linear-gradient(120deg, #0f172a, #0b1022); min-height:100vh; }
+    @media (min-width: 640px) { body { padding: 24px; } }
+    .container { max-width: 1320px; margin: 0 auto; }
+    .header { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:16px; }
+    .title { font-size:20px; font-weight:600; letter-spacing:0.2px; margin-right:auto; }
+    .status { font-size:12px; color:var(--muted); }
+    .error { color: var(--danger); font-weight:600; }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+      border:1px solid var(--border); border-radius:12px; padding:16px; backdrop-filter: blur(6px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04); }
+
+    .controls { display:flex; flex-wrap:wrap; gap:10px; align-items:stretch; }
+    .input { flex-grow:1; display:flex; gap:8px; align-items:center; background:var(--card); border:1px solid var(--border);
+      border-radius:10px; padding:10px 12px; color:var(--text); min-height:42px; }
+    .input label { font-size:12px; color:var(--muted); margin-right:6px; }
+    .input input, .input select { background:transparent; border:none; outline:none; color:var(--text); width:100%; font-size:14px; }
+    .input:nth-child(1) { min-width: 220px; } /* Ticker */
+    .input:nth-child(2), .input:nth-child(3), .input:nth-child(4) { min-width: 180px; } /* Range, Interval, Cache */
+    .input.small { min-width: 120px; } /* SMA, EMA, etc. */
+    .btn { flex-grow:1; min-width:220px; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1px solid var(--border);
+      border-radius:10px; padding:10px 14px; cursor:pointer; font-weight:600; color:var(--text);
+      background: linear-gradient(180deg, #0ea5e9, #0284c7); box-shadow: 0 6px 14px rgba(2,132,199,0.35); min-height:42px; }
+    @media (min-width: 1400px) { .btn { max-width: 250px; } }
+
+    .btn:disabled { opacity:.6; cursor:not-allowed; }
+    .grid { display:grid; grid-template-columns: 1fr; gap:16px; margin-top:16px; }
+    @media (min-width:1100px) { .grid { grid-template-columns: 2fr 1fr; } }
+    .chart { width:100%; height:420px; }
+    .chart.small { height:300px; }
+    .foot { margin-top:12px; font-size:12px; color:var(--muted); }
+    code { color:#93c5fd; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="title">Monitor – OHLC + Indicadores</div>
+      <div class="status" id="status">Inicializando…</div>
+    </div>
+
+    <div class="card">
+      <div class="controls">
+        <div class="input"><label for="ticker">Ticker</label><input id="ticker" type="text" value="PETR4.SA" placeholder="Ex.: PETR4.SA"></div>
+        <div class="input"><label for="range">Range</label>
+          <select id="range">
+            <option value="1d">1 dia</option><option value="5d">5 dias</option>
+            <option value="1mo" selected>1 mês</option><option value="3mo">3 meses</option>
+            <option value="6mo">6 meses</option><option value="1y">1 ano</option>
+            <option value="2y">2 anos</option><option value="5y">5 anos</option>
+            <option value="10y">10 anos</option><option value="ytd">YTD</option><option value="max">Máximo</option>
+          </select>
+        </div>
+        <div class="input"><label for="interval">Interval</label>
+          <select id="interval">
+            <option value="1m">1m</option><option value="2m">2m</option><option value="5m">5m</option>
+            <option value="15m">15m</option><option value="30m">30m</option><option value="60m">60m</option>
+            <option value="90m">90m</option><option value="1h">1h</option><option value="1d" selected>1d</option>
+            <option value="5d">5d</option><option value="1wk">1wk</option><option value="1mo">1mo</option><option value="3mo">3mo</option>
+          </select>
+        </div>
+        <div class="input"><label for="ttl">Cache (s)</label><input id="ttl" type="number" min="30" step="30" value="1800" title="Tempo de cache em segundos"></div>
+
+        <div class="input small"><label for="sma">SMA</label><input id="sma" type="number" min="2" step="1" value="20" title="Período SMA"></div>
+        <div class="input small"><label for="ema">EMA</label><input id="ema" type="number" min="2" step="1" value="20" title="Período EMA"></div>
+        <div class="input small"><label for="rsi">RSI</label><input id="rsi" type="number" min="2" step="1" value="14" title="Período RSI"></div>
+        <div class="input small"><label for="macdf">MACD F</label><input id="macdf" type="number" min="2" step="1" value="12" title="MACD rápido"></div>
+        <div class="input small"><label for="macds">MACD S</label><input id="macds" type="number" min="2" step="1" value="26" title="MACD lento"></div>
+        <div class="input small"><label for="macdsig">SIG</label><input id="macdsig" type="number" min="2" step="1" value="9" title="Sinal MACD"></div>
+
+        <button id="btnLoad" class="btn" type="button">Atualizar gráficos</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="status">Candlestick (OHLC)</div>
+        <div id="candleChart" class="chart"></div>
+      </div>
+      <div class="card">
+        <div class="status">Volume</div>
+        <div id="volumeChart" class="chart"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="status">Preço (Close + SMA/EMA)</div>
+      <div id="priceChart" class="chart"></div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="status">RSI</div>
+        <div id="rsiChart" class="chart small"></div>
+      </div>
+      <div class="card">
+        <div class="status">MACD</div>
+        <div id="macdChart" class="chart small"></div>
+      </div>
+    </div>
+
+    <div class="foot">
+      Dicas: use sufixo “.SA” para B3 (ex.: <code>PETR4.SA</code>). Intraday (1m/2m/5m) tem limitações de histórico — se falhar, ajuste o <em>range</em> ou aumente o <em>interval</em>.
+    </div>
+  </div>
+
+  <!-- ===================== CONFIGURAÇÕES ===================== -->
+  <script>
+    // Cole AQUI a URL do seu Apps Script Web App (terminando em /exec)
+    const WEB_APP_URL    = 'https://script.google.com/macros/s/AKfycbxLfLGTX56nRb_7KjyFM8qyf3tGRiXkXK4XMPgRaKMWmkimZj1B5H51UKUuGiDck9-irw/exec';
+    const USE_JSONP_ONLY = true; // mantenha true para evitar CORS (funciona até via file://)
+  </script>
+
+  <!-- ============ APP: INJEÇÃO DO LOADER + LÓGICA PRINCIPAL ============ -->
+  <script>
+    // --- Estado para redesenho ---
+    let lastPayload = null;
+    let resizeScheduled = false;
+
+    // --- Utilitários UI/Charts ---
+    function isMobileDevice() {
+      // Heurística simples para detectar dispositivos com tela de toque
+      return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    }
+    function setStatus(msg, isError = false) {
+      const el = document.getElementById('status');
+      el.textContent = msg;
+      el.classList.toggle('error', isError);
+    }
+    function num(v) { const n = Number(v); return isFinite(n) ? n : null; }
+    function commonOptions(title) {
+      return {
+        title,
+        backgroundColor: 'transparent',
+        titleTextStyle: { color: '#e5e7eb' },
+        legend: { position: 'none', textStyle: { color: '#e5e7eb' } },
+        hAxis: { textStyle: { color: '#9ca3af' }, gridlines: { color: '#1f2937' } },
+        vAxis: { textStyle: { color: '#9ca3af' }, gridlines: { color: '#1f2937' } },
+        chartArea: { left: 60, right: 20, top: 40, bottom: 50 },
+        crosshair: { trigger: 'both', color: '#64748b', opacity: 0.8 }
+      };
+    }
+    function buildUrl() {
+      const ticker   = document.getElementById('ticker').value.trim();
+      const range    = document.getElementById('range').value || '1mo';
+      const interval = document.getElementById('interval').value || '1d';
+      const ttl      = Number(document.getElementById('ttl').value || 1800);
+      const sma      = Number(document.getElementById('sma').value || 20);
+      const ema      = Number(document.getElementById('ema').value || 20);
+      const rsi      = Number(document.getElementById('rsi').value || 14);
+      const macdf    = Number(document.getElementById('macdf').value || 12);
+      const macds    = Number(document.getElementById('macds').value || 26);
+      const macdsig  = Number(document.getElementById('macdsig').value || 9);
+
+      const params = new URLSearchParams({
+        ativo: ticker, range, interval, ttlSeconds: String(ttl),
+        sma: String(sma), ema: String(ema), rsi: String(rsi),
+        macdf: String(macdf), macds: String(macds), macdsig: String(macdsig),
+        tz: 'utc'
+      });
+      return `${WEB_APP_URL}?${params.toString()}`;
+    }
+    function jsonp(url, timeout = 15000) {
+      return new Promise((resolve, reject) => {
+        const cbName = 'jsonp_cb_' + Math.random().toString(36).slice(2);
+        const s = document.createElement('script');
+        let timer = setTimeout(() => { cleanup(); reject(new Error('JSONP timeout')); }, timeout);
+        function cleanup() {
+          if (timer) clearTimeout(timer);
+          delete window[cbName];
+          if (s.parentNode) s.parentNode.removeChild(s);
+        }
+        window[cbName] = (data) => { cleanup(); resolve(data); };
+        s.onerror = () => { cleanup(); reject(new Error('JSONP load error')); };
+        s.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+        document.body.appendChild(s);
+      });
+    }
+
+    // --- Desenho dos gráficos ---
+    function drawAll(obj, ativo) {
+      lastPayload = { obj, ativo };
+
+      const header = obj.header || [];
+      const rows = obj.rows || [];
+      if (!header.length || !rows.length) {
+        setStatus('Sem dados retornados.', true);
+        return;
+      }
+
+      const idxDate = header.indexOf('Data');
+      const idxOpen = header.indexOf('Open');
+      const idxHigh = header.indexOf('High');
+      const idxLow  = header.indexOf('Low');
+      const idxClose= header.indexOf('Close');
+      const idxVol  = header.indexOf('Volume');
+      const idxIndicator = header.indexOf('indicador');
+      const idxSMA = header.findIndex(h => /^SMA_/.test(h));
+      const idxEMA = header.findIndex(h => /^EMA_/.test(h));
+      const idxRSI = header.findIndex(h => /^RSI_/.test(h));
+      const idxMACD = header.indexOf('MACD');
+      const idxSignal = header.indexOf('Signal');
+      const idxHist = header.indexOf('Hist');
+
+      // Candlestick
+      (function drawCandle(){
+        const dt = new google.visualization.DataTable();
+        dt.addColumn('datetime', 'Data');
+        dt.addColumn('number', 'Low');
+        dt.addColumn('number', 'Open');
+        dt.addColumn('number', 'Close');
+        dt.addColumn('number', 'High');
+        rows.forEach(r => dt.addRow([new Date(r[idxDate]), num(r[idxLow]), num(r[idxOpen]), num(r[idxClose]), num(r[idxHigh])]));
+        const options = commonOptions(`Candlestick – ${ativo}`);
+        options.candlestick = { fallingColor: { strokeWidth: 1, fill: '#ef4444' }, risingColor: { strokeWidth: 1, fill: '#22c55e' } };
+        new google.visualization.CandlestickChart(document.getElementById('candleChart')).draw(dt, options);
+      })();
+
+      // Volume
+      (function drawVolume(){
+        const dt = new google.visualization.DataTable();
+        dt.addColumn('datetime', 'Data');
+        dt.addColumn('number', 'Volume');
+        dt.addColumn({ type: 'string', role: 'style' });
+        const upColor='#22c55e', downColor='#ef4444', flatColor='#6b7280';
+        rows.forEach(r => {
+          const ind = Number(r[idxIndicator] ?? 0);
+          const color = ind > 0 ? upColor : (ind < 0 ? downColor : flatColor);
+          dt.addRow([new Date(r[idxDate]), num(r[idxVol]), `color: ${color}`]);
+        });
+        const options = commonOptions(`Volume – ${ativo}`);
+        options.legend = 'none'; options.bar = { groupWidth: '90%' };
+        new google.visualization.ColumnChart(document.getElementById('volumeChart')).draw(dt, options);
+      })();
+
+      // Preço (Close + SMA/EMA)
+      (function drawPrice(){
+        const dt = new google.visualization.DataTable();
+        dt.addColumn('datetime', 'Data');
+        dt.addColumn('number', 'Close');
+        if (idxSMA >= 0) dt.addColumn('number', header[idxSMA]);
+        if (idxEMA >= 0) dt.addColumn('number', header[idxEMA]);
+        rows.forEach(r => {
+          const arr = [new Date(r[idxDate]), num(r[idxClose])];
+          if (idxSMA >= 0) arr.push(num(r[idxSMA]));
+          if (idxEMA >= 0) arr.push(num(r[idxEMA]));
+          dt.addRow(arr);
+        });
+        const options = commonOptions(`Preço – ${ativo}`);
+        options.legend = { position: 'top', textStyle: { color: '#e5e7eb' } };
+        options.colors = ['#60a5fa', '#f59e0b', '#10b981'];
+        if (!isMobileDevice()) {
+          options.explorer = { axis: 'horizontal', keepInBounds: true, maxZoomIn: 8.0 };
+        }
+        new google.visualization.LineChart(document.getElementById('priceChart')).draw(dt, options);
+      })();
+
+      // RSI
+      (function drawRSI(){
+        if (idxRSI < 0) return;
+        const dt = new google.visualization.DataTable();
+        dt.addColumn('datetime', 'Data');
+        dt.addColumn('number', header[idxRSI]);
+        dt.addColumn('number', 'OB 70');
+        dt.addColumn('number', 'OS 30');
+        rows.forEach(r => dt.addRow([new Date(r[idxDate]), num(r[idxRSI]), 70, 30]));
+        const options = commonOptions('RSI');
+        options.vAxis.viewWindow = { min: 0, max: 100 };
+        options.legend = { position: 'top', textStyle: { color: '#e5e7eb' } };
+        options.colors = ['#a78bfa', '#9ca3af', '#9ca3af'];
+        options.series = {
+          1: { lineDashStyle: [6,6], enableInteractivity: false },
+          2: { lineDashStyle: [6,6], enableInteractivity: false }
+        };
+        new google.visualization.LineChart(document.getElementById('rsiChart')).draw(dt, options);
+      })();
+
+      // MACD
+      (function drawMACD(){
+        if (idxMACD < 0 || idxSignal < 0 || idxHist < 0) return;
+        const dt = new google.visualization.DataTable();
+        dt.addColumn('datetime', 'Data');
+        dt.addColumn('number', 'Hist');
+        dt.addColumn('number', 'MACD');
+        dt.addColumn('number', 'Signal');
+        rows.forEach(r => dt.addRow([new Date(r[idxDate]), num(r[idxHist]), num(r[idxMACD]), num(r[idxSignal])]));
+        const options = commonOptions('MACD');
+        options.seriesType = 'line';
+        options.series = {
+          0: { type: 'bars', color: '#94a3b8' },
+          1: { type: 'line', color: '#f472b6' },
+          2: { type: 'line', color: '#22c55e' }
+        };
+        new google.visualization.ComboChart(document.getElementById('macdChart')).draw(dt, options);
+      })();
+    }
+
+    function scheduleResize() {
+      if (resizeScheduled) return;
+      resizeScheduled = true;
+      setTimeout(() => {
+        resizeScheduled = false;
+        if (lastPayload) {
+          const { obj, ativo } = lastPayload;
+          drawAll(obj, ativo);
+        }
+      }, 150);
+    }
+    window.addEventListener('resize', scheduleResize);
+
+    async function fetchAndDraw() {
+      const ticker = (document.getElementById('ticker').value || '').trim();
+      if (!ticker) { setStatus('Informe um ticker válido.', true); return; }
+      setStatus(`Buscando dados de ${ticker}...`);
+      const btn = document.getElementById('btnLoad');
+      btn.disabled = true;
+
+      try {
+        const url = buildUrl();
+        let obj;
+        if (USE_JSONP_ONLY) {
+          obj = await jsonp(url);
+        } else {
+          // tenta fetch normal, cai no JSONP em caso de CORS
+          try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            obj = await res.json();
+          } catch (_) {
+            obj = await jsonp(url);
+          }
+        }
+
+        if (obj && obj.error) {
+          setStatus(obj.message || 'Erro ao consultar dados.', true);
+          return;
+        }
+        drawAll(obj, ticker);
+        const flag = obj?.source?.cached ? ' (cache)' : '';
+        setStatus(`Exibindo ${ticker}${flag}`);
+      } catch (err) {
+        console.error(err);
+        setStatus('Falha ao buscar dados (verifique o Web App URL ou parâmetros).', true);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // --- Injeção do loader e bootstrap da app ---
+    (function injectChartsLoader() {
+      const s = document.createElement('script');
+      s.src = 'https://www.gstatic.com/charts/loader.js';
+      s.async = true;
+      s.onload = () => {
+        if (!window.google || !google.charts) {
+          setStatus('Loader carregado, mas google.charts indisponível.', true);
+          return;
+        }
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(() => {
+          // Liga listeners agora que Charts está pronto
+          const btn = document.getElementById('btnLoad');
+          if (!btn) { setStatus('Botão #btnLoad não encontrado.', true); return; }
+          btn.addEventListener('click', fetchAndDraw);
+          setStatus('Pronto');
+          // Busca inicial automática
+          fetchAndDraw();
+        });
+      };
+      s.onerror = () => setStatus('ERRO ao carregar https://www.gstatic.com/charts/loader.js (rede/ambiente pode estar bloqueando).', true);
+      document.head.appendChild(s);
+    })();
+  </script>
+</body>
+</html>
+
