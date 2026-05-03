@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rebalanceamento de Carteira para Iniciantes: Por Que e Como Fazer - Minerativos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00C853; /* Verde vibrante */
+            --secondary-color: #212121; /* Dark Gray */
+            --background-color: #121212; /* Darker background */
+            --text-color: #E0E0E0; /* Light Gray for text */
+            --heading-color: #FFFFFF; /* White for headings */
+            --card-background: #1E1E1E; /* Slightly lighter dark for cards */
+            --border-color: #333333;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px;
+            padding: 30px;
+            background-color: var(--secondary-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            color: var(--heading-color);
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        header p.meta {
+            color: var(--primary-color);
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .content h2 {
+            color: var(--heading-color);
+            font-size: 1.8em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .content h3 {
+            color: var(--primary-color);
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .content p {
+            margin-bottom: 1em;
+            font-size: 1.05em;
+        }
+
+        .content ul,
+        .content ol {
+            margin-bottom: 1em;
+            padding-left: 25px;
+        }
+
+        .content li {
+            margin-bottom: 0.5em;
+        }
+
+        .image-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-container figcaption {
+            font-size: 0.85em;
+            color: #B0B0B0;
+            margin-top: 10px;
+        }
+
+        .infographic-placeholder {
+            background-color: var(--card-background);
+            border: 2px dashed var(--primary-color);
+            padding: 40px 20px;
+            margin: 30px 0;
+            text-align: center;
+            font-style: italic;
+            color: var(--primary-color);
+            border-radius: 8px;
+            font-size: 1.1em;
+        }
+
+        .chart-placeholder {
+            background-color: var(--card-background);
+            border: 2px dashed #64B5F6; /* Azul para gráficos */
+            padding: 40px 20px;
+            margin: 30px 0;
+            text-align: center;
+            font-style: italic;
+            color: #64B5F6;
+            border-radius: 8px;
+            font-size: 1.1em;
+        }
+
+        .call-to-action {
+            background-color: var(--primary-color);
+            color: var(--heading-color);
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-top: 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .call-to-action a {
+            color: var(--heading-color);
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background-color: #009624; /* Um verde mais escuro para o botão */
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .call-to-action a:hover {
+            background-color: #00791E;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.8em;
+            color: #888888;
+        }
+
+        .disclaimer {
+            font-size: 0.8em;
+            color: #FFC107; /* Amarelo para avisos */
+            background-color: #333333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .content h2 {
+                font-size: 1.5em;
+            }
+
+            .content h3 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Rebalanceamento de Carteira para Iniciantes: Por Que e Como Fazer</h1>
+            <p class="meta">Por Equipe Minerativos | 15 de Maio de 2026 | Categoria: Gestão de Portfólio</p>
+        </header>
+
+        <div class="content">
+            <p>Você montou sua carteira de investimentos com cuidado, escolhendo ativos que se alinham aos seus objetivos e tolerância a risco. Mas, com o tempo, o mercado se move, e a composição original da sua carteira pode se desviar. É aí que entra o <strong>rebalanceamento de carteira</strong>, uma estratégia crucial para manter seus investimentos no caminho certo.</p>
+
+            <h2>O Que é Rebalanceamento de Carteira?</h2>
+            <p>Rebalancear uma carteira significa ajustar periodicamente a alocação dos seus ativos para que ela retorne à sua proporção original ou desejada. Por exemplo, se você começou com 60% em ações e 40% em renda fixa, mas as ações tiveram um desempenho excepcional, elas podem agora representar 70% da sua carteira. O rebalanceamento implicaria vender parte das ações e comprar mais renda fixa para voltar à proporção 60/40.</p>
+
+            <h3>Por Que Rebalancear?</h3>
+            <p>O rebalanceamento é fundamental por algumas razões:</p>
+            <ul>
+                <li><strong>Controle de Risco:</strong> Impede que sua carteira se torne excessivamente exposta a ativos de maior risco (que geralmente crescem mais rápido).</li>
+                <li><strong>Manutenção da Estratégia:</strong> Garante que sua carteira continue alinhada aos seus objetivos de investimento e perfil de risco original.</li>
+                <li><strong>Vender na Alta, Comprar na Baixa:</strong> De forma contraintuitiva, o rebalanceamento força você a vender ativos que subiram (realizando lucros) e comprar ativos que caíram (aproveitando preços mais baixos).</li>
+            </ul>
+
+            
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin: 30px 0;">
+        <div style="background: #333; padding: 20px; border-radius: 10px; width: 200px; text-align: center; border-top: 4px solid #00C853;">
+            <h4 style="margin: 0; color: #00C853;">PASSO 01</h4>
+            <p style="font-size: 0.9em; margin: 10px 0 0;">Mineração de Dados Brutos</p>
+        </div>
+        <div style="background: #333; padding: 20px; border-radius: 10px; width: 200px; text-align: center; border-top: 4px solid #00C853;">
+            <h4 style="margin: 0; color: #00C853;">PASSO 02</h4>
+            <p style="font-size: 0.9em; margin: 10px 0 0;">Filtragem por IA (Outliers)</p>
+        </div>
+        <div style="background: #333; padding: 20px; border-radius: 10px; width: 200px; text-align: center; border-top: 4px solid #00C853;">
+            <h4 style="margin: 0; color: #00C853;">PASSO 03</h4>
+            <p style="font-size: 0.9em; margin: 10px 0 0;">Insight para Tomada de Decisão</p>
+        </div>
+    </div>
+    
+
+            <h2>Quando e Como Rebalancear?</h2>
+            <p>Existem duas abordagens principais para o rebalanceamento:</p>
+            <ol>
+                <li><strong>Baseado no Tempo:</strong> Rebalancear em intervalos fixos (ex: anualmente, semestralmente). É simples e disciplinado.</li>
+                <li><strong>Baseado em Limites:</strong> Rebalancear quando a alocação de um ativo se desvia de um limite pré-definido (ex: 5% acima ou abaixo do target). Mais ativo, mas pode gerar mais custos de transação.</li>
+            </ol>
+
+            <h3>A Minerativos Facilita Seu Rebalanceamento</h3>
+            <p>Nossa plataforma foi projetada para simplificar esse processo complexo. Com a Minerativos, você pode:</p>
+            <ul>
+                <li>Definir sua alocação ideal para cada ativo.</li>
+                <li>Visualizar rapidamente o desvio da sua carteira em relação ao objetivo.</li>
+                <li>Receber sugestões de rebalanceamento, indicando quanto comprar ou vender de cada ativo para retornar à alocação desejada.</li>
+                <li>Utilizar a Teoria de Markowitz para otimizar seu rebalanceamento, buscando a melhor relação risco-retorno.</li>
+            </ul>
+
+            <div class="chart-placeholder">
+                [GRÁFICO INTERATIVO: ANTES E DEPOIS DO REBALANCEAMENTO NA MINERATIVOS]
+                <p>Gráfico de pizza ou barras mostrando a alocação de uma carteira antes e depois do rebalanceamento sugerido pela plataforma.</p>
+            </div>
+
+            <h2>Mantenha Sua Carteira Otimizada!</h2>
+            <p>O rebalanceamento não é apenas uma tarefa, mas uma disciplina que protege seu capital e maximiza suas chances de sucesso a longo prazo. Com a Minerativos, você tem a ferramenta ideal para manter sua carteira sempre alinhada aos seus objetivos.</p>
+
+            <div class="disclaimer">
+                <strong>⚠️ Aviso Legal:</strong> Este conteúdo é fornecido apenas para fins educacionais e informativos. Não constitui recomendação de investimento. Consulte um profissional qualificado antes de tomar qualquer decisão financeira.
+            </div>
+        </div>
+
+        <div class="call-to-action">
+            <h2>Leve sua Análise de Investimentos para o Próximo Nível!</h2>
+            <p>Descubra como a Minerativos pode otimizar seu portfólio com inteligência artificial e estratégias comprovadas.</p>
+            <a href="https://minerativos.com.br/assinatura" target="_blank">Conheça a Minerativos Premium</a>
+        </div>
+
+        <footer>
+            &copy; 2026 Minerativos. Todos os direitos reservados.
+        </footer>
+    </div>
+</body>
+</html>

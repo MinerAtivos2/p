@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Poder da Diversificação: Além do Óbvio para Seu Portfólio - Minerativos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00C853; /* Verde vibrante */
+            --secondary-color: #212121; /* Dark Gray */
+            --background-color: #121212; /* Darker background */
+            --text-color: #E0E0E0; /* Light Gray for text */
+            --heading-color: #FFFFFF; /* White for headings */
+            --card-background: #1E1E1E; /* Slightly lighter dark for cards */
+            --border-color: #333333;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px;
+            padding: 30px;
+            background-color: var(--secondary-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            color: var(--heading-color);
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        header p.meta {
+            color: var(--primary-color);
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .content h2 {
+            color: var(--heading-color);
+            font-size: 1.8em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .content h3 {
+            color: var(--primary-color);
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .content p {
+            margin-bottom: 1em;
+            font-size: 1.05em;
+        }
+
+        .content ul,
+        .content ol {
+            margin-bottom: 1em;
+            padding-left: 25px;
+        }
+
+        .content li {
+            margin-bottom: 0.5em;
+        }
+
+        .image-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-container figcaption {
+            font-size: 0.85em;
+            color: #B0B0B0;
+            margin-top: 10px;
+        }
+
+        .infographic-placeholder {
+            background-color: var(--card-background);
+            border: 2px dashed var(--primary-color);
+            padding: 40px 20px;
+            margin: 30px 0;
+            text-align: center;
+            font-style: italic;
+            color: var(--primary-color);
+            border-radius: 8px;
+            font-size: 1.1em;
+        }
+
+        .chart-placeholder {
+            background-color: var(--card-background);
+            border: 2px dashed #64B5F6; /* Azul para gráficos */
+            padding: 40px 20px;
+            margin: 30px 0;
+            text-align: center;
+            font-style: italic;
+            color: #64B5F6;
+            border-radius: 8px;
+            font-size: 1.1em;
+        }
+
+        .call-to-action {
+            background-color: var(--primary-color);
+            color: var(--heading-color);
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-top: 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .call-to-action a {
+            color: var(--heading-color);
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background-color: #009624; /* Um verde mais escuro para o botão */
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .call-to-action a:hover {
+            background-color: #00791E;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.8em;
+            color: #888888;
+        }
+
+        .disclaimer {
+            font-size: 0.8em;
+            color: #FFC107; /* Amarelo para avisos */
+            background-color: #333333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .content h2 {
+                font-size: 1.5em;
+            }
+
+            .content h3 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>O Poder da Diversificação: Além do Óbvio para Seu Portfólio</h1>
+            <p class="meta">Por Equipe Minerativos | 10 de Junho de 2026 | Categoria: Gestão de Portfólio</p>
+        </header>
+
+        <div class="content">
+            <p>A diversificação é um dos pilares mais antigos e fundamentais do investimento. A máxima "não coloque todos os ovos na mesma cesta" é mais do que um clichê; é uma estratégia comprovada para gerenciar riscos e otimizar retornos. Mas a verdadeira diversificação vai muito além de simplesmente comprar várias ações. Entender como diversificar de forma inteligente é crucial, e a Minerativos pode te ajudar nessa jornada.</p>
+
+            <h2>O Que é Diversificação Inteligente?</h2>
+            <p>Diversificar não é apenas ter muitos ativos, mas ter ativos que se comportam de maneira diferente em cenários de mercado distintos. A chave está na <strong>correlação</strong> entre os ativos. Ativos com baixa correlação (ou, idealmente, correlação negativa) ajudam a suavizar as oscilações do seu portfólio, pois quando um cai, o outro pode subir ou permanecer estável.</p>
+
+            <h3>Benefícios da Diversificação</h3>
+            <ul>
+                <li><strong>Redução de Risco:</strong> Diminui o risco específico de um ativo ou setor.</li>
+                <li><strong>Estabilidade do Portfólio:</strong> Ajuda a proteger o capital em momentos de turbulência.</li>
+                <li><strong>Otimização de Retornos:</strong> Permite capturar ganhos de diferentes segmentos do mercado.</li>
+            </ul>
+
+            
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin: 30px 0;">
+        <div style="background: #333; padding: 20px; border-radius: 10px; width: 200px; text-align: center; border-top: 4px solid #00C853;">
+            <h4 style="margin: 0; color: #00C853;">PASSO 01</h4>
+            <p style="font-size: 0.9em; margin: 10px 0 0;">Mineração de Dados Brutos</p>
+        </div>
+        <div style="background: #333; padding: 20px; border-radius: 10px; width: 200px; text-align: center; border-top: 4px solid #00C853;">
+            <h4 style="margin: 0; color: #00C853;">PASSO 02</h4>
+            <p style="font-size: 0.9em; margin: 10px 0 0;">Filtragem por IA (Outliers)</p>
+        </div>
+        <div style="background: #333; padding: 20px; border-radius: 10px; width: 200px; text-align: center; border-top: 4px solid #00C853;">
+            <h4 style="margin: 0; color: #00C853;">PASSO 03</h4>
+            <p style="font-size: 0.9em; margin: 10px 0 0;">Insight para Tomada de Decisão</p>
+        </div>
+    </div>
+    
+
+            <h2>Como a Minerativos Ajuda na Sua Diversificação?</h2>
+            <p>Nossa plataforma oferece ferramentas que permitem uma diversificação mais estratégica e baseada em dados:</p>
+            <ol>
+                <li><strong>Análise de Correlação:</strong> Entenda como os ativos do seu portfólio se movem em relação uns aos outros. Identifique ativos que podem atuar como "hedge" natural.</li>
+                <li><strong>Otimização de Portfólio (Markowitz):</strong> Nossa ferramenta de rebalanceamento, baseada na Teoria de Markowitz, sugere a alocação ideal de ativos para maximizar o retorno para um dado nível de risco, levando em conta a diversificação.</li>
+                <li><strong>Visão Abrangente:</strong> Acompanhe a alocação do seu portfólio por setor, tipo de ativo e até mesmo por estratégia (dividendos, crescimento), garantindo uma diversificação completa.</li>
+            </ol>
+
+            <div class="chart-placeholder">
+                [GRÁFICO INTERATIVO: MATRIZ DE CORRELAÇÃO DE ATIVOS NA MINERATIVOS]
+                <p>Exemplo de uma matriz de correlação mostrando a relação entre diferentes ativos, destacando as correlações baixas e negativas.</p>
+            </div>
+
+            <h2>Construa um Portfólio Resiliente e Lucrativo!</h2>
+            <p>A diversificação é mais do que uma regra de ouro; é uma estratégia dinâmica que exige acompanhamento e ajustes. Com a Minerativos, você tem as ferramentas para ir além do óbvio, construindo um portfólio verdadeiramente diversificado e preparado para os desafios do mercado.</p>
+
+            <div class="disclaimer">
+                <strong>⚠️ Aviso Legal:</strong> Este conteúdo é fornecido apenas para fins educacionais e informativos. Não constitui recomendação de investimento. Consulte um profissional qualificado antes de tomar qualquer decisão financeira.
+            </div>
+        </div>
+
+        <div class="call-to-action">
+            <h2>Leve sua Análise de Investimentos para o Próximo Nível!</h2>
+            <p>Descubra como a Minerativos pode otimizar seu portfólio com inteligência artificial e estratégias comprovadas.</p>
+            <a href="https://minerativos.com.br/assinatura" target="_blank">Conheça a Minerativos Premium</a>
+        </div>
+
+        <footer>
+            &copy; 2026 Minerativos. Todos os direitos reservados.
+        </footer>
+    </div>
+</body>
+</html>
