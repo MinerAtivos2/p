@@ -5,7 +5,7 @@
 class App {
   constructor() {
     // URL do Google Apps Script (substituir após a implantação na planilha)
-    this.GAS_URL = "https://script.google.com/macros/s/AKfycbxpg81YMeyl5jqPmVyuDgNFLlBD96o3LByumaMjBfz7AsVzDeFCcBAsv3jEpSFKMgb7oA/exec";
+    this.GAS_URL = "https://script.google.com/macros/s/AKfycby_placeholder_gas_url/exec";
 
     this.user = null; // { username, empresa, session_token }
     this.inventory = [];
