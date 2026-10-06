@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Categorização e Taxonomia de Soluções de IA</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       HEADER & NAVEGAÇÃO
+       ========================================================================== -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="brand-area">
+        <!-- Espaço do Logotipo Corporativo -->
+        <div class="logo-placeholder" id="logoPlaceholder" title="Logotipo da Plataforma">
+          <span class="logo-icon">📊</span>
+          <span>SuaLogo</span>
+        </div>
+        <div class="brand-title">
+          <span class="brand-name">Taxonomia de IA</span>
+          <span class="brand-subtitle">Governança & Classificação</span>
+        </div>
+      </div>
+
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menu">☰</button>
+
+      <nav class="main-nav" id="mainNav">
+        <ul class="nav-links">
+          <li><a href="#teoria" class="nav-link active">Eixos & Classes</a></li>
+          <li><a href="#conceitos" class="nav-link">Conceitos</a></li>
+          <li><a href="#inventario" class="nav-link" id="navInventarioLink">Inventário</a></li>
+        </ul>
+
+        <div class="auth-actions">
+          <!-- Visitante -->
+          <div id="guestActions" style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-outline btn-sm" id="btnLoginOpen">Entrar</button>
+            <button class="btn btn-primary btn-sm" id="btnRequestCommunityOpen">Fazer Parte da Comunidade</button>
+          </div>
+
+          <!-- Membro Autenticado -->
+          <div id="memberActions" style="display: none; align-items: center; gap: 0.75rem;">
+            <span class="user-info-pill">
+              👤 <strong id="memberUserName">Usuário</strong> (<span id="memberEmpresa">Empresa</span>)
+            </span>
+            <button class="btn btn-outline btn-sm" id="btnLogout">Sair</button>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO SECTION
+       ========================================================================== -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-pill">
+        <span>⚡ Framework Corporativo de Taxonomia de Soluções de IA v1.2</span>
+      </div>
+      <h1 class="hero-title">Categorização Estruturada e Governança para Soluções de IA</h1>
+      <p class="hero-description">
+        Classifique projetos de IA com rigor metodológico a partir de 6 eixos operacionais determinísticos. Vincule cada classe a controles mínimos obrigatórios, níveis de supervisão humana e requisitos de portabilidade.
+      </p>
+      <div class="hero-cta">
+        <button class="btn btn-accent btn-lg" id="btnHeroWizard">
+          <span>🧙‍♂️ Iniciar Wizard de Categorização</span>
+        </button>
+        <a href="#teoria" class="btn btn-outline btn-lg">Explorar a Taxonomia</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CONTEÚDO PRINCIPAL
+       ========================================================================== -->
+  <main class="main-container">
+
+    <!-- SEÇÃO 1: EIXOS E CLASSES (Visível para todos, atrativo e engajador) -->
+    <section id="teoria" class="section">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <span class="section-icon">🧩</span>
+          <h2 class="section-title">Os 6 Eixos Operacionais de Classificação</h2>
+        </div>
+        <p class="section-subtitle">
+          A classe de uma solução de IA nunca é escolhida pelo nome comercial, mas calculada a partir de suas respostas funcionais aos eixos de arquitetura.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <!-- Eixo N -->
+        <div class="card axis-card">
+          <span class="axis-code">Eixo N</span>
+          <h3 class="card-title">Natureza da Inteligência</h3>
+          <p class="card-text">Define o tipo e modelo de inteligência mais elevado presente na solução.</p>
+          <ul class="axis-list">
+            <li><strong>N0:</strong> Determinística (regras, SQL, heurística)</li>
+            <li><strong>N1:</strong> Preditiva ML (escore, classe ou ranking)</li>
+            <li><strong>N2:</strong> Generativa (LLM/SLM gerando texto/síntese)</li>
+            <li><strong>N3:</strong> Generativa com Ferramentas (LLM invoca ferramentas)</li>
+          </ul>
+        </div>
+
+        <!-- Eixo F -->
+        <div class="card axis-card" style="border-left: 4px solid var(--accent);">
+          <span class="axis-code" style="background: rgba(37, 99, 235, 0.2); color: #60a5fa;">Eixo F (Decisivo)</span>
+          <h3 class="card-title">Controle de Fluxo</h3>
+          <p class="card-text">Determina quem controla a próxima etapa da execução da aplicação.</p>
+          <ul class="axis-list">
+            <li><strong>F0:</strong> Fluxo fixo em código (sem escolha pelo modelo)</li>
+            <li><strong>F1:</strong> Roteamento pontual (escolha entre caminhos)</li>
+            <li><strong>F2:</strong> Laço de decisão (ciclo com encerramento pelo modelo)</li>
+            <li><strong>F3:</strong> Delegação entre agentes (contratos opacos)</li>
+          </ul>
+        </div>
+
+        <!-- Eixo A -->
+        <div class="card axis-card">
+          <span class="axis-code">Eixo A</span>
+          <h3 class="card-title">Espaço de Ações</h3>
+          <p class="card-text">Mapeia o catálogo e a capacidade de interação com ferramentas externas.</p>
+          <ul class="axis-list">
+            <li><strong>A0:</strong> Sem ação externa (apenas lê/produz saída)</li>
+            <li><strong>A1:</strong> Catálogo fechado (ferramentas fixas e versionadas)</li>
+            <li><strong>A2:</strong> Catálogo dinâmico (descoberta em tempo de execução)</li>
+          </ul>
+        </div>
+
+        <!-- Eixo E -->
+        <div class="card axis-card">
+          <span class="axis-code">Eixo E</span>
+          <h3 class="card-title">Efeito sobre o Mundo</h3>
+          <p class="card-text">Mede o impacto e a reversibilidade das ações realizadas pela solução.</p>
+          <ul class="axis-list">
+            <li><strong>E0:</strong> Assistiva (informação para consumo humano)</li>
+            <li><strong>E1:</strong> Executora reversível (grava com opção de desfazer)</li>
+            <li><strong>E2:</strong> Executora irreversível ou externa (efeito cliente/dinheiro)</li>
+          </ul>
+        </div>
+
+        <!-- Eixo P -->
+        <div class="card axis-card">
+          <span class="axis-code">Eixo P</span>
+          <h3 class="card-title">Persistência de Estado</h3>
+          <p class="card-text">Indica a retenção e o reuso de memória entre chamadas e sessões.</p>
+          <ul class="axis-list">
+            <li><strong>P0:</strong> Sem estado (execuções independentes)</li>
+            <li><strong>P1:</strong> Estado de sessão (descartado ao final)</li>
+            <li><strong>P2:</strong> Memória persistente (retém entre execuções)</li>
+          </ul>
+        </div>
+
+        <!-- Eixo H -->
+        <div class="card axis-card">
+          <span class="axis-code">Eixo H</span>
+          <h3 class="card-title">Supervisão Humana</h3>
+          <p class="card-text">Nível de engajamento do operador humano no ciclo de decisão.</p>
+          <ul class="axis-list">
+            <li><strong>H0:</strong> Humano no laço (aprovação prévia obrigatória)</li>
+            <li><strong>H1:</strong> Humano sobre o laço (monitorado por exceção)</li>
+            <li><strong>H2:</strong> Humano fora do laço (revisão posterior)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAINÉIS DAS CLASSES DA TAXONOMIA -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <span class="section-icon">🏛️</span>
+          <h2 class="section-title">As 6 Classes de Soluções de IA</h2>
+        </div>
+        <p class="section-subtitle">
+          Resultante do cálculo dos eixos N e F. Cada classe exige um regime específico de avaliação, observabilidade e guardrails.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <!-- C0 -->
+        <div class="card class-card c0">
+          <div class="card-title">
+            <span>Automação Determinística</span>
+            <span class="badge badge-c0">C0</span>
+          </div>
+          <p class="card-text">Sem modelo de IA treinado. Regras fixas, SQL e heurísticas sem incerteza probabilística.</p>
+          <div class="class-meta">
+            <div class="class-meta-item"><span>Assinatura típica:</span> <strong>N0 · F0</strong></div>
+            <div class="class-meta-item"><span>Avaliação:</span> <strong>Teste por caso</strong></div>
+            <div class="class-meta-item"><span>Inventário de IA:</span> <strong>Fora do escopo</strong></div>
+          </div>
+        </div>
+
+        <!-- C1 -->
+        <div class="card class-card c1">
+          <div class="card-title">
+            <span>Automação Preditiva</span>
+            <span class="badge badge-c1">C1</span>
+          </div>
+          <p class="card-text">Modelo de ML clássico embarcado gerando escores, agrupamentos ou classificações.</p>
+          <div class="class-meta">
+            <div class="class-meta-item"><span>Assinatura típica:</span> <strong>N1 · F0</strong></div>
+            <div class="class-meta-item"><span>Avaliação:</span> <strong>Acurácia e Data Drift</strong></div>
+            <div class="class-meta-item"><span>Guardrail:</span> <strong>Limite e Fallback</strong></div>
+          </div>
+        </div>
+
+        <!-- C2 -->
+        <div class="card class-card c2">
+          <div class="card-title">
+            <span>IA Generativa Embarcada</span>
+            <span class="badge badge-c2">C2</span>
+          </div>
+          <p class="card-text">LLM/SLM gera texto, resumos ou extrações em fluxo fixo de código sem autonomia de roteamento.</p>
+          <div class="class-meta">
+            <div class="class-meta-item"><span>Assinatura típica:</span> <strong>N2 · F0 · A0</strong></div>
+            <div class="class-meta-item"><span>Avaliação:</span> <strong>Amostra e Custo</strong></div>
+            <div class="class-meta-item"><span>Guardrail:</span> <strong>Tokens e Ancoragem</strong></div>
+          </div>
+        </div>
+
+        <!-- C3 -->
+        <div class="card class-card c3">
+          <div class="card-title">
+            <span>Triagem Inteligente</span>
+            <span class="badge badge-c3">C3</span>
+          </div>
+          <p class="card-text">O modelo realiza roteamento pontual em tempo de execução entre caminhos predefinidos.</p>
+          <div class="class-meta">
+            <div class="class-meta-item"><span>Assinatura típica:</span> <strong>N2/N3 · F1 · A1</strong></div>
+            <div class="class-meta-item"><span>Avaliação:</span> <strong>Matriz de Roteamento</strong></div>
+            <div class="class-meta-item"><span>Guardrail:</span> <strong>Teto & Rota Segura</strong></div>
+          </div>
+        </div>
+
+        <!-- C4 -->
+        <div class="card class-card c4">
+          <div class="card-title">
+            <span>Agente Limitado</span>
+            <span class="badge badge-c4">C4</span>
+          </div>
+          <p class="card-text">O modelo decide passos em ciclo de decisão (laço) até atingir o objetivo com catálogo de ferramentas.</p>
+          <div class="class-meta">
+            <div class="class-meta-item"><span>Assinatura típica:</span> <strong>N3 · F2 · A1</strong></div>
+            <div class="class-meta-item"><span>Avaliação:</span> <strong>Ponta a Ponta / Adversarial</strong></div>
+            <div class="class-meta-item"><span>Guardrail:</span> <strong>Disjuntor por laço</strong></div>
+          </div>
+        </div>
+
+        <!-- C5 -->
+        <div class="card class-card c5">
+          <div class="card-title">
+            <span>Sistema Multiagente</span>
+            <span class="badge badge-c5">C5</span>
+          </div>
+          <p class="card-text">Agentes autônomos acionando outros agentes por meio de contratos de serviço opacos.</p>
+          <div class="class-meta">
+            <div class="class-meta-item"><span>Assinatura típica:</span> <strong>N3 · F3 · A1/A2</strong></div>
+            <div class="class-meta-item"><span>Avaliação:</span> <strong>Contratos Inter-agentes</strong></div>
+            <div class="class-meta-item"><span>Aprovação:</span> <strong>Comitê Obrigatório</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: CONCEITOS EXPLIATIVOS E REGRAS DETALHADAS (Conteúdo Restrito após Login) -->
+    <section id="conceitos" class="section">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <span class="section-icon">📚</span>
+          <h2 class="section-title">Detalhamento Conceitual & Regras de Negócio</h2>
+        </div>
+        <p class="section-subtitle">
+          Aprofundamento técnico em diretrizes de governança, regras de coerência, grau de criticidade e dependência de plataforma (Lock-in).
+        </p>
+      </div>
+
+      <!-- Banner visível quando VISITANTE (não logado) -->
+      <div id="conceptsLockedBanner" class="locked-banner">
+        <span class="locked-icon">🔒</span>
+        <h3 class="locked-title">Conteúdo Explicativo Restrito a Membros</h3>
+        <p class="locked-desc">
+          Para visualizar a especificação detalhada de regras de negócio (RN-001 a RN-240), regras de composição (Subeixo NC), grau de criticidade (G1-G3), matriz de controles acumulativos e tabela de Lock-in (D0-D3), faça login ou solicite sua adesão à comunidade.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" id="btnLockedLogin">Fazer Login</button>
+          <button class="btn btn-outline" id="btnLockedCommunity">Solicitar Cadastro na Comunidade</button>
+        </div>
+      </div>
+
+      <!-- Conteúdo completo liberado APENAS para LOGADOS -->
+      <div id="conceptsUnlockedContent" style="display: none;">
+        <div class="grid-2">
+
+          <!-- Card 1: Princípios da Taxonomia -->
+          <div class="card principle-card">
+            <div class="card-title">
+              <span>Princípios Estruturantes de Agência</span>
+              <span class="badge badge-c1">RN-006 a RN-011</span>
+            </div>
+            <p class="card-text">
+              • <strong>Quantidade não gera agência:</strong> Encadear várias chamadas de LLM em sequência fixa continua sendo C2.<br>
+              • <strong>Modelo mais sofisticado não muda a classe:</strong> Usar GPT-4o não transforma C2 em agente.<br>
+              • <strong>Nome do produto não define classe:</strong> "Agentes" em plataformas low-code são classificados estritamente pelos eixos N, F, A, E, P, H.<br>
+              • <strong>O termo "Agente" é reservado às classes C4 e C5.</strong>
+            </p>
+          </div>
+
+          <!-- Card 2: Grau de Criticidade -->
+          <div class="card principle-card" style="border-left-color: var(--accent-gold);">
+            <div class="card-title">
+              <span>Grau de Criticidade & Alocação de Risco</span>
+              <span class="badge badge-g2">G1 - G3</span>
+            </div>
+            <p class="card-text">
+              • <strong>G1 (Baixo):</strong> Eixo E0 sem dados sensíveis. Aprovação no próprio time.<br>
+              • <strong>G2 (Médio):</strong> Eixo E1 (execução reversível) OU presença de dados pessoais/sigilosos.<br>
+              • <strong>G3 (Alto):</strong> Eixo E2 (ação irreversível/externa) OU efeito direto sobre clientes, crédito, fraude ou obrigações regulatórias. Exige parecer formal de governança/segurança.
+            </p>
+          </div>
+
+          <!-- Card 3: Dependência de Plataforma (Lock-in) -->
+          <div class="card principle-card" style="border-left-color: var(--success);">
+            <div class="card-title">
+              <span>Eixo D — Portabilidade & Lock-in</span>
+              <span class="badge badge-c0">D0 a D3</span>
+            </div>
+            <p class="card-text">
+              • <strong>D0 (Portável):</strong> Contêineres, código Python puro e bibliotecas abertas.<br>
+              • <strong>D1 (Acoplamento de Hospedagem):</strong> Azure Functions, Notebooks Fabric com gatilhos proprietários.<br>
+              • <strong>D2 (Serviço Gerenciado Substituível):</strong> Azure OpenAI, Document Intelligence (modelos padrão). Exige estratégia de saída se G3.<br>
+              • <strong>D3 (Dependência Estrutural):</strong> Copilot Studio, Power Automate no caminho crítico. <strong>Estratégia de saída e aceite formal de risco são obrigatórios.</strong>
+            </p>
+          </div>
+
+          <!-- Card 4: Subeixo NC e Regras de Coerência -->
+          <div class="card principle-card" style="border-left-color: #9333ea;">
+            <div class="card-title">
+              <span>Subeixo NC (Composição Híbrida)</span>
+              <span class="badge badge-c5">NC0 - NC2</span>
+            </div>
+            <p class="card-text">
+              • <strong>NC0:</strong> Componente único.<br>
+              • <strong>NC1 (Híbrida ML + Generativa):</strong> Assinatura expõe N2+N1 ou N3+N1. Controles de C1 passam a ser <strong>cumulativos</strong>.<br>
+              • <strong>NC2 (Múltiplos Preditivos):</strong> Vários modelos de ML. Assinatura exibe N1+N1.<br>
+              • <strong>Validações de Coerência:</strong> O sistema sinaliza automaticamente inconsistências como NC1 sem N2/N3 ou N0 com laço de decisão.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: INVENTÁRIO DE PROJETOS E CATEGORIZAÇÃO (Restrito a Membros) -->
+    <section id="inventario" class="section">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <span class="section-icon">📋</span>
+          <h2 class="section-title">Inventário de Projetos Categorizados</h2>
+        </div>
+        <p class="section-subtitle">
+          Gerencie e acompanhe as fichas de classificação de soluções de IA cadastradas para a sua empresa.
+        </p>
+      </div>
+
+      <!-- Banner visível quando VISITANTE -->
+      <div id="inventoryGuestBanner" class="locked-banner">
+        <span class="locked-icon">💼</span>
+        <h3 class="locked-title">Acesso Restrito ao Inventário</h3>
+        <p class="locked-desc">
+          O inventário de soluções e a funcionalidade de entrada/categorização de projetos estão disponíveis exclusivamente para usuários membros cadastrados.
+        </p>
+        <button class="btn btn-primary" id="btnInventoryGuestLogin">Fazer Login para Acessar</button>
+      </div>
+
+      <!-- Área de Inventário para USUÁRIO LOGADO -->
+      <div id="inventoryMemberArea" style="display: none;">
+        <div class="inventory-header-actions">
+          <div>
+            <h3 style="font-size: 1.1rem; color: #ffffff;">Seus Projetos Cadastrados</h3>
+            <span style="font-size: 0.85rem; color: var(--text-muted);" id="inventoryCountText">Carregando projetos...</span>
+          </div>
+          <div style="display: flex; gap: 0.75rem;">
+            <button class="btn btn-secondary" id="btnOpenWizardModal">
+              <span>🧙‍♂️ Wizard de Categorização</span>
+            </button>
+            <button class="btn btn-primary" id="btnOpenDirectFichaModal">
+              <span>➕ Cadastrar Nova Ficha</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table" id="inventoryTable">
+            <thead>
+              <tr>
+                <th>Nome do Projeto</th>
+                <th>Versão</th>
+                <th>Classe</th>
+                <th>Assinatura</th>
+                <th>Criticidade</th>
+                <th>Portabilidade (D)</th>
+                <th>Coerência</th>
+                <th>Atualizado em</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTableBody">
+              <tr>
+                <td colspan="9" class="empty-state">Carregando inventário do seu usuário...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       MODAIS
+       ========================================================================== -->
+
+  <!-- MODAL 1: LOGIN -->
+  <div class="modal-overlay" id="modalLogin">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Acesso ao Sistema</h3>
+        <button class="modal-close" class="closeModalBtn" data-modal="modalLogin">&times;</button>
+      </div>
+      <form id="formLogin">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Nome de Usuário<span class="required">*</span></label>
+            <input type="text" class="form-control" id="loginUsername" required placeholder="Digite seu usuário">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Senha<span class="required">*</span></label>
+            <input type="password" class="form-control" id="loginPassword" required placeholder="Digite sua senha">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline closeModalBtn" data-modal="modalLogin">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: FAZER PARTE DA COMUNIDADE (SOLICITAR CADASTRO) -->
+  <div class="modal-overlay" id="modalCommunity">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Fazer Parte da Comunidade</h3>
+        <button class="modal-close closeModalBtn" data-modal="modalCommunity">&times;</button>
+      </div>
+      <form id="formCommunity">
+        <div class="modal-body">
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            Preencha os dados abaixo para solicitar sua participação na comunidade. Analisaremos sua solicitação e entraremos em contato para disponibilizar suas credenciais de membro.
+          </p>
+          <div class="form-group">
+            <label class="form-label">Seu E-mail Corporativo<span class="required">*</span></label>
+            <input type="email" class="form-control" id="commEmail" required placeholder="seu.nome@empresa.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nome da Empresa / Organização<span class="required">*</span></label>
+            <input type="text" class="form-control" id="commEmpresa" required placeholder="Nome da sua empresa">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline closeModalBtn" data-modal="modalCommunity">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Solicitar Acesso</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: WIZARD DE CATEGORIZAÇÃO (9 Perguntas Guiadas) -->
+  <div class="modal-overlay" id="modalWizard">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title">Assistente de Categorização Guiada (Wizard)</h3>
+        <button class="modal-close closeModalBtn" data-modal="modalWizard">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="wizard-progress">
+          <div class="wizard-progress-bar"><div class="wizard-progress-fill" id="wizardProgressFill"></div></div>
+          <div class="wizard-step-indicator active" id="wStepInd1">1</div>
+          <div class="wizard-step-indicator" id="wStepInd2">2</div>
+          <div class="wizard-step-indicator" id="wStepInd3">3</div>
+          <div class="wizard-step-indicator" id="wStepInd4">4</div>
+          <div class="wizard-step-indicator" id="wStepInd5">5</div>
+          <div class="wizard-step-indicator" id="wStepInd6">6</div>
+          <div class="wizard-step-indicator" id="wStepInd7">7</div>
+          <div class="wizard-step-indicator" id="wStepInd8">8</div>
+          <div class="wizard-step-indicator" id="wStepInd9">9</div>
+        </div>
+
+        <form id="formWizard">
+          <!-- Pergunta 1 -->
+          <div class="wizard-step active" data-step="1">
+            <h4 style="color: #ffffff; margin-bottom: 0.5rem;">Pergunta 1 de 9: Modelo de Inteligência</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">A solução utiliza algum modelo treinado de Machine Learning ou modelo de linguagem (LLM/SLM)?</p>
+            <div class="option-radio-group">
+              <label class="option-radio-card">
+                <input type="radio" name="wQ1" value="sim" checked>
+                <div class="option-radio-content">
+                  <strong>Sim</strong>
+                  <span>Utiliza modelo preditivo (ML), modelo generativo (LLM) ou ambos.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ1" value="nao">
+                <div class="option-radio-content">
+                  <strong>Não (Apenas regras determinísticas / SQL)</strong>
+                  <span>Solução puramente algorítmica. Será classificada como C0 (fora do inventário de IA).</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Pergunta 2 -->
+          <div class="wizard-step" data-step="2">
+            <h4 style="color: #ffffff; margin-bottom: 0.5rem;">Pergunta 2 de 9: Composição da Inteligência (NC)</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Há mais de um tipo de inteligência integrando a mesma solução?</p>
+            <div class="option-radio-group">
+              <label class="option-radio-card">
+                <input type="radio" name="wQ2" value="NC0" checked>
+                <div class="option-radio-content">
+                  <strong>NC0 — Componente único</strong>
+                  <span>Apenas um tipo de inteligência presente.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ2" value="NC1">
+                <div class="option-radio-content">
+                  <strong>NC1 — Híbrida (ML + Generativa)</strong>
+                  <span>Modelo preditivo (ML) e LLM atuando na mesma solução.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ2" value="NC2">
+                <div class="option-radio-content">
+                  <strong>NC2 — Múltiplos Preditivos</strong>
+                  <span>Dois ou mais modelos de Machine Learning, sem IA generativa.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Pergunta 3 -->
+          <div class="wizard-step" data-step="3">
+            <h4 style="color: #ffffff; margin-bottom: 0.5rem;">Pergunta 3 de 9: Natureza da Generativa</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Qual é a natureza da inteligência principal do sistema?</p>
+            <div class="option-radio-group">
+              <label class="option-radio-card">
+                <input type="radio" name="wQ3" value="N1">
+                <div class="option-radio-content">
+                  <strong>N1 — Preditiva (ML Clássico)</strong>
+                  <span>Gera escore, classificação ou ranking sem geração de texto.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ3" value="N2" checked>
+                <div class="option-radio-content">
+                  <strong>N2 — IA Generativa Simples</strong>
+                  <span>LLM/SLM gerando texto, sintese ou extração sem invocação de ferramentas externas.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ3" value="N3">
+                <div class="option-radio-content">
+                  <strong>N3 — IA Generativa com Ferramentas</strong>
+                  <span>LLM seleciona e executa ferramentas cujos resultados realimentam o raciocínio.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Pergunta 4 -->
+          <div class="wizard-step" data-step="4">
+            <h4 style="color: #ffffff; margin-bottom: 0.5rem;">Pergunta 4 de 9: Controle de Fluxo em Execução</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">O modelo escolhe, em tempo de execução, qual é a próxima etapa a ser executada?</p>
+            <div class="option-radio-group">
+              <label class="option-radio-card">
+                <input type="radio" name="wQ4" value="F0" checked>
+                <div class="option-radio-content">
+                  <strong>Não (F0 — Fluxo Fixo em Código)</strong>
+                  <span>A sequência de execução é 100% determinada pelo código escrito pela equipe.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ4" value="sim">
+                <div class="option-radio-content">
+                  <strong>Sim</strong>
+                  <span>O modelo decide em tempo de execução o caminho ou a próxima ação.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Pergunta 5 -->
+          <div class="wizard-step" data-step="5">
+            <h4 style="color: #ffffff; margin-bottom: 0.5rem;">Pergunta 5 de 9: Tipo de Roteamento</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">A escolha da próxima etapa ocorre uma única vez, entre caminhos previamente enumerados?</p>
+            <div class="option-radio-group">
+              <label class="option-radio-card">
+                <input type="radio" name="wQ5" value="F1" checked>
+                <div class="option-radio-content">
+                  <strong>Sim (F1 — Roteamento Pontual / Triagem)</strong>
+                  <span>Classifica e envia para uma fila ou ramificação específica (C3).</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ5" value="nao">
+                <div class="option-radio-content">
+                  <strong>Não (Iteração ou delegação complexa)</strong>
+                  <span>Pode haver laço de repetição ou acionamento entre agentes.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Pergunta 6 -->
+          <div class="wizard-step" data-step="6">
+            <h4 style="color: #ffffff; margin-bottom: 0.5rem;">Pergunta 6 de 9: Laço Autônomo</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">O modelo opera em um ciclo (laço de decisão) e decide por conta própria quando encerrar a tarefa?</p>
+            <div class="option-radio-group">
+              <label class="option-radio-card">
+                <input type="radio" name="wQ6" value="F2" checked>
+                <div class="option-radio-content">
+                  <strong>Sim (F2 — Agente em Laço de Decisão)</strong>
+                  <span>Executa ações repetidas até determinar a conclusão da meta (C4).</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ6" value="F3">
+                <div class="option-radio-content">
+                  <strong>Não, há delegação entre agentes (F3)</strong>
+                  <span>Agentes acionam outros agentes por meio de contratos opacos (C5).</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Pergunta 7 -->
+          <div class="wizard-step" data-step="7">
+            <h4 style="color: #ffffff; margin-bottom: 0.5rem;">Pergunta 7 de 9: Espaço de Ações (Eixo A)</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Como as ferramentas e APIs externas estão disponibilizadas para o modelo?</p>
+            <div class="option-radio-group">
+              <label class="option-radio-card">
+                <input type="radio" name="wQ7" value="A0" checked>
+                <div class="option-radio-content">
+                  <strong>A0 — Sem ação externa</strong>
+                  <span>Apenas produz respostas/relatórios para consumo humano.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ7" value="A1">
+                <div class="option-radio-content">
+                  <strong>A1 — Catálogo fechado</strong>
+                  <span>Ferramentas fixas, declaradas e versionadas.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ7" value="A2">
+                <div class="option-radio-content">
+                  <strong>A2 — Catálogo dinâmico</strong>
+                  <span>Ferramentas descobertas dinamicamente em tempo de execução (MCP/diretório).</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Pergunta 8 -->
+          <div class="wizard-step" data-step="8">
+            <h4 style="color: #ffffff; margin-bottom: 0.5rem;">Pergunta 8 de 9: Efeito e Criticidade (Eixo E)</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Qual é o efeito direto das saídas/ações produzidas pela solução?</p>
+            <div class="option-radio-group">
+              <label class="option-radio-card">
+                <input type="radio" name="wQ8" value="E0" checked>
+                <div class="option-radio-content">
+                  <strong>E0 — Assistiva</strong>
+                  <span>Apenas produz informação para análise humana.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ8" value="E1">
+                <div class="option-radio-content">
+                  <strong>E1 — Executora Reversível</strong>
+                  <span>Realiza gravações em sistemas onde é possível desfazer/reverter.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ8" value="E2">
+                <div class="option-radio-content">
+                  <strong>E2 — Executora Irreversível ou Externa</strong>
+                  <span>Impacta diretamente clientes, transações financeiras ou comunicação externa.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Pergunta 9 -->
+          <div class="wizard-step" data-step="9">
+            <h4 style="color: #ffffff; margin-bottom: 0.5rem;">Pergunta 9 de 9: Dependência de Plataforma (Eixo D)</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Se a assinatura de nuvem/plataforma fosse desligada hoje, o que seria preciso para migrar a solução?</p>
+            <div class="option-radio-group">
+              <label class="option-radio-card">
+                <input type="radio" name="wQ9" value="D0" checked>
+                <div class="option-radio-content">
+                  <strong>D0 — Portável (Subir mesma imagem em contêiner)</strong>
+                  <span>Código aberto e neutro de fornecedor.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ9" value="D1">
+                <div class="option-radio-content">
+                  <strong>D1 — Acoplamento de Hospedagem</strong>
+                  <span>Reescrever gatilhos e adaptadores mantendo a lógica interna.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ9" value="D2">
+                <div class="option-radio-content">
+                  <strong>D2 — Serviço Gerenciado Substituível</strong>
+                  <span>Trocar serviço gerenciado (ex: Azure OpenAI) por similar e revalidar.</span>
+                </div>
+              </label>
+              <label class="option-radio-card">
+                <input type="radio" name="wQ9" value="D3">
+                <div class="option-radio-content">
+                  <strong>D3 — Dependência Estrutural (Power Automate / Copilot Studio)</strong>
+                  <span>Exige reconstrução por ser altamente proprietário.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" id="btnWizardPrev" style="display: none;">Anterior</button>
+        <button type="button" class="btn btn-primary" id="btnWizardNext">Próximo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: FICHA COMPLETA DE CLASSIFICAÇÃO DE PROJETO -->
+  <div class="modal-overlay" id="modalFicha">
+    <div class="modal modal-xl">
+      <div class="modal-header">
+        <h3 class="modal-title" id="fichaModalTitle">Ficha de Classificação de Solução de IA</h3>
+        <button class="modal-close closeModalBtn" data-modal="modalFicha">&times;</button>
+      </div>
+      <form id="formFicha">
+        <input type="hidden" id="fichaProjectId" value="">
+        <div class="modal-body">
+
+          <!-- 1. IDENTIFICAÇÃO -->
+          <h4 style="color: var(--accent); margin-bottom: 0.75rem;">1. Identificação do Projeto</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Nome da Solução<span class="required">*</span></label>
+              <input type="text" class="form-control" id="fNome" required placeholder="Ex: Assessor de Análise de Contratos">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Versão da Solução<span class="required">*</span></label>
+              <input type="text" class="form-control" id="fVersao" required value="v1.0">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">PO Responsável<span class="required">*</span></label>
+              <input type="text" class="form-control" id="fPO" required placeholder="Nome do Product Owner">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Empresa / Área Demandante<span class="required">*</span></label>
+              <input type="text" class="form-control" id="fEmpresaArea" required placeholder="Sua Empresa / Área">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Envolve Dados Pessoais ou Sigilosos?</label>
+              <select class="form-select" id="fDadoSensivel">
+                <option value="Nao">Não</option>
+                <option value="Sim">Sim</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Efeito Direto em Domínio Sensível?</label>
+              <select class="form-select" id="fDominioSensivel">
+                <option value="">Nenhum</option>
+                <option value="Cliente">Impacto Direto ao Cliente</option>
+                <option value="Credito">Operações de Crédito</option>
+                <option value="Fraude">Prevenção à Fraude</option>
+                <option value="Regulatorio">Obrigação Regulatória / Legal</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 2. EIXOS DE CLASSIFICAÇÃO -->
+          <h4 style="color: var(--accent); margin-top: 1.5rem; margin-bottom: 0.75rem;">2. Eixos de Classificação (Entradas do PO)</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Eixo N — Natureza da Inteligência</label>
+              <select class="form-select trigger-calc" id="fEixoN">
+                <option value="N0">N0 — Determinística</option>
+                <option value="N1">N1 — Preditiva (ML)</option>
+                <option value="N2" selected>N2 — IA Generativa</option>
+                <option value="N3">N3 — Generativa com Ferramentas</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Subeixo NC — Composição Híbrida</label>
+              <select class="form-select trigger-calc" id="fEixoNC">
+                <option value="NC0" selected>NC0 — Componente único</option>
+                <option value="NC1">NC1 — Híbrida (ML + Generativa)</option>
+                <option value="NC2">NC2 — Múltiplos Preditivos (MLs)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Eixo F — Controle de Fluxo (Decisivo)</label>
+              <select class="form-select trigger-calc" id="fEixoF">
+                <option value="F0" selected>F0 — Fluxo fixo em código</option>
+                <option value="F1">F1 — Roteamento pontual (Triagem)</option>
+                <option value="F2">F2 — Laço de decisão (Agente)</option>
+                <option value="F3">F3 — Delegação entre agentes</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Eixo A — Espaço de Ações</label>
+              <select class="form-select trigger-calc" id="fEixoA">
+                <option value="A0" selected>A0 — Sem ação externa</option>
+                <option value="A1">A1 — Catálogo fechado/versionado</option>
+                <option value="A2">A2 — Catálogo dinâmico (MCP)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Eixo E — Efeito sobre o Mundo</label>
+              <select class="form-select trigger-calc" id="fEixoE">
+                <option value="E0" selected>E0 — Assistiva (Informação)</option>
+                <option value="E1">E1 — Executora reversível</option>
+                <option value="E2">E2 — Executora irreversível/externa</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Eixo P — Persistência de Estado</label>
+              <select class="form-select trigger-calc" id="fEixoP">
+                <option value="P0" selected>P0 — Sem estado</option>
+                <option value="P1">P1 — Estado de sessão</option>
+                <option value="P2">P2 — Memória persistente entre execuções</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Eixo H — Supervisão Humana Declarada</label>
+              <select class="form-select trigger-calc" id="fEixoH">
+                <option value="H0" selected>H0 — Humano no laço (Aprovação prévia)</option>
+                <option value="H1">H1 — Humano sobre o laço (Exceção)</option>
+                <option value="H2">H2 — Humano fora do laço (Revisão posterior)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Eixo D — Portabilidade & Lock-in</label>
+              <select class="form-select trigger-calc" id="fEixoD">
+                <option value="D0">D0 — Portável (Contêineres)</option>
+                <option value="D1">D1 — Acoplamento de hospedagem</option>
+                <option value="D2" selected>D2 — Serviço gerenciado substituível</option>
+                <option value="D3">D3 — Dependência estrutural</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Justificativa Objetiva do PO<span class="required">*</span></label>
+            <textarea class="form-control" id="fJustificativa" rows="2" required placeholder="Explique sucintamente a escolha dos eixos para auditoria..."></textarea>
+          </div>
+
+          <!-- 3. PAINEL DE RESULTADOS CALCULADOS PELO SISTEMA -->
+          <div class="result-panel">
+            <div class="result-panel-title">
+              <span>🧮 Resultado Calculado do Enquadramento (Automático)</span>
+            </div>
+            <div class="result-grid">
+              <div class="result-item">
+                <div class="result-label">Classe Calculada</div>
+                <div class="result-value" id="rClasse">C2 — IA Generativa Embarcada</div>
+              </div>
+              <div class="result-item">
+                <div class="result-label">Assinatura Oficial</div>
+                <div class="result-value" id="rAssinatura">C2 · N2·F0·A0·E0·P0·H0</div>
+              </div>
+              <div class="result-item">
+                <div class="result-label">Grau de Criticidade</div>
+                <div class="result-value" id="rGrau">G1 — Baixo</div>
+              </div>
+              <div class="result-item">
+                <div class="result-label">Supervisão Mínima Exigida</div>
+                <div class="result-value" id="rSupervisaoMin">H1 — Humano sobre o laço</div>
+              </div>
+              <div class="result-item">
+                <div class="result-label">Teto de Consumo Obrigatório?</div>
+                <div class="result-value" id="rTetoObrig">Não obrigatório</div>
+              </div>
+              <div class="result-item">
+                <div class="result-label">Estratégia de Saída (Lock-in)</div>
+                <div class="result-value" id="rEstrategiaSaida">Não exigida</div>
+              </div>
+            </div>
+
+            <div class="coherence-box coherence-ok" id="rCoerenciaBox">
+              <span>✅ Coerência da Classificação: <strong>OK</strong></span>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline closeModalBtn" data-modal="modalFicha">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btnSaveFicha">Salvar no Inventário</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div>
+        <strong>Plataforma de Categorização de Soluções de IA</strong> — Versão v1.2
+        <p style="font-size: 0.78rem; margin-top: 0.25rem;">Hospedado 100% de forma estática via GitHub Pages com Backend Serverless em Google Sheets.</p>
+      </div>
+      <div>
+        <span style="font-size: 0.8rem; color: var(--text-dim);">Conforme especificação de taxonomia corporativa</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
