@@ -5,7 +5,7 @@
 class App {
   constructor() {
     // URL do Google Apps Script (substituir após a implantação na planilha)
-    this.GAS_URL = "https://script.google.com/macros/s/AKfycbxpg81YMeyl5jqPmVyuDgNFLlBD96o3LByumaMjBfz7AsVzDeFCcBAsv3jEpSFKMgb7oA/exec";
+    this.GAS_URL = "https://script.google.com/macros/s/AKfycby_placeholder_gas_url/exec";
 
     this.user = null; // { username, empresa, session_token }
     this.inventory = [];
@@ -219,19 +219,34 @@ class App {
     }
   }
 
+  /* Helper para envios sem problemas de CORS no Google Apps Script Web App */
+  async apiPost(payload) {
+    if (!this.GAS_URL || this.GAS_URL.includes('placeholder')) {
+      throw new Error("URL do Apps Script não configurada.");
+    }
+
+    // Google Apps Script requer 'text/plain' para evitar preflight OPTIONS CORS no browser
+    const res = await fetch(this.GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      throw new Error(`HTTP Error ${res.status}`);
+    }
+
+    return await res.json();
+  }
+
   async verifyAuthStatus() {
     if (!this.GAS_URL || this.GAS_URL.includes('placeholder')) return;
     try {
-      const res = await fetch(this.GAS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'status',
-          username: this.user.username,
-          session_token: this.user.session_token
-        })
+      const data = await this.apiPost({
+        action: 'status',
+        username: this.user.username,
+        session_token: this.user.session_token
       });
-      const data = await res.json();
       if (!data.logged_in) {
         this.clearUserSession();
       }
@@ -264,12 +279,7 @@ class App {
     }
 
     try {
-      const res = await fetch(this.GAS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'login', username, password })
-      });
-      const data = await res.json();
+      const data = await this.apiPost({ action: 'login', username, password });
 
       if (data.success) {
         this.saveUserSession({
@@ -284,7 +294,8 @@ class App {
         this.toast(data.error || 'Usuário ou senha inválidos.', 'error');
       }
     } catch (err) {
-      this.toast('Erro na comunicação com a API do servidor.', 'error');
+      console.error('Erro de API no Login:', err);
+      this.toast(`Erro na comunicação com o servidor: ${err.message || 'Verifique o deploy do Apps Script (Acesso: Qualquer Pessoa)'}`, 'error');
     }
   }
 
@@ -305,12 +316,7 @@ class App {
     }
 
     try {
-      const res = await fetch(this.GAS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'request_community', email, empresa })
-      });
-      const data = await res.json();
+      const data = await this.apiPost({ action: 'request_community', email, empresa });
 
       if (data.success) {
         this.closeModal('modalCommunity');
@@ -319,7 +325,8 @@ class App {
         this.toast(data.error || 'Erro ao enviar solicitação.', 'error');
       }
     } catch (err) {
-      this.toast('Erro ao comunicar com o servidor.', 'error');
+      console.error('Erro de API na Comunidade:', err);
+      this.toast(`Erro ao comunicar com o servidor: ${err.message}`, 'error');
     }
   }
 
@@ -684,17 +691,12 @@ class App {
     }
 
     try {
-      const res = await fetch(this.GAS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'save_project',
-          username: this.user.username,
-          session_token: this.user.session_token,
-          project: projectData
-        })
+      const data = await this.apiPost({
+        action: 'save_project',
+        username: this.user.username,
+        session_token: this.user.session_token,
+        project: projectData
       });
-      const data = await res.json();
 
       if (data.success) {
         this.closeModal('modalFicha');
@@ -704,7 +706,8 @@ class App {
         this.toast(data.error || 'Erro ao salvar projeto.', 'error');
       }
     } catch (err) {
-      this.toast('Erro na transmissão com o servidor.', 'error');
+      console.error('Erro de API ao Salvar Projeto:', err);
+      this.toast(`Erro na transmissão com o servidor: ${err.message}`, 'error');
     }
   }
 
@@ -717,16 +720,11 @@ class App {
     }
 
     try {
-      const res = await fetch(this.GAS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'get_inventory',
-          username: this.user.username,
-          session_token: this.user.session_token
-        })
+      const data = await this.apiPost({
+        action: 'get_inventory',
+        username: this.user.username,
+        session_token: this.user.session_token
       });
-      const data = await res.json();
 
       if (data.success) {
         this.inventory = data.projects || [];
@@ -750,17 +748,12 @@ class App {
     }
 
     try {
-      const res = await fetch(this.GAS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'delete_project',
-          username: this.user.username,
-          session_token: this.user.session_token,
-          project_id: projectId
-        })
+      const data = await this.apiPost({
+        action: 'delete_project',
+        username: this.user.username,
+        session_token: this.user.session_token,
+        project_id: projectId
       });
-      const data = await res.json();
 
       if (data.success) {
         this.toast(data.message || 'Projeto removido.', 'info');
@@ -769,7 +762,8 @@ class App {
         this.toast(data.error || 'Erro ao excluir projeto.', 'error');
       }
     } catch (err) {
-      this.toast('Erro ao comunicar exclusão.', 'error');
+      console.error('Erro de API ao Excluir Projeto:', err);
+      this.toast(`Erro ao comunicar exclusão: ${err.message}`, 'error');
     }
   }
 

@@ -53,9 +53,13 @@ Crie uma nova [Planilha Google](https://sheets.new) com três abas (páginas):
 6. Ajuste as configurações:
    - **Descrição:** `API do Sistema de Categorização de IA`
    - **Executar como:** `Eu` (sua conta Google)
-   - **Quem tem acesso:** `Qualquer pessoa` *(Necessário para o site estático realizar requisições CORS)*
+   - **Quem tem acesso:** `Qualquer pessoa` (ou `Anyone` - **OBRIGATÓRIO** para liberar o acesso ao frontend estático sem solicitar login na conta Google do visitante)
 7. Clique em **Implantar** e autorize os acessos solicitados pela sua conta.
 8. Copie a **URL do App da Web** gerada (formato `https://script.google.com/macros/s/.../exec`).
+
+> ⚠️ **Solução para a mensagem "Erro na comunicação com a API do servidor":**
+> - Se a opção **Quem tem acesso** estiver definida como "Apenas eu" ou "Qualquer pessoa com conta do Google", o navegador bloqueará as chamadas e retornará erro de comunicação. Certifique-se de selecionar **"Qualquer pessoa"** (Anyone).
+> - Ao alterar o código `api.gs` ou as configurações de implantação, você **DEVE** criar uma **Nova versão**: vá em **Implantar > Gerenciar implantações**, clique no ícone de lápis ✏️, em *Versão* selecione **Nova versão** e clique em **Implantar**.
 
 ---
 
