@@ -1,74 +1,78 @@
-# Configuração do Backend com Google Sheets 📊
+# Configuração do Backend Google Sheets — Sistema de Categorização de Soluções de IA
 
-Este projeto foi adaptado para funcionar de forma 100% estática (GitHub Pages), utilizando o **Google Sheets** como banco de dados através do **Google Apps Script**.
-
-## 1. Preparação da Planilha
-
-1. Crie uma nova [Planilha Google](https://sheets.new).
-2. Renomeie as abas (páginas) da planilha para:
-   - `Users`
-   - `Portfolios`
-   - `Leads`
-
-### Estrutura das Abas (Cabeçalhos na Linha 1)
-
-**Aba `Users`:**
-| id | username | password | is_admin |
-|---|---|---|---|
-| 1 | admin | admin123 | 1 |
-| 2 | lucas1 | senha123 | 0 |
-
-**Aba `Portfolios`:**
-| user_id | data | updated_at |
-|---|---|---|
-| (preenchido automaticamente) | (JSON do portfólio) | (data/hora) |
-
-**Aba `Leads`:**
-| email | timestamp |
-|---|---|
-| (preenchido automaticamente) | (data/hora) |
+Este projeto é hospedado de forma 100% estática (ex: GitHub Pages) e utiliza o **Google Sheets** com **Google Apps Script** como banco de dados e API serverless para autenticação, solicitação de membros (leads) e inventário de projetos.
 
 ---
 
-## 2. Instalação do Script (API)
+## 1. Estrutura da Planilha Google
 
-1. Na sua planilha, vá em **Extensões > Apps Script**.
-2. No editor que abrir, apague todo o código e cole o conteúdo do arquivo `docs/api.gs` deste repositório.
-3. Clique no ícone de disquete (Salvar) e nomeie como `B3-Backend`.
+Crie uma nova [Planilha Google](https://sheets.new) com três abas (páginas):
+
+### Aba 1: `Users`
+| Column | Nome do Campo | Descrição |
+|---|---|---|
+| A | `ID` | Identificador único do usuário (ex: `1`, `2`) |
+| B | `Username` | Nome de usuário para login |
+| C | `Password` | Senha |
+| D | `Empresa` | Nome da empresa/organização do usuário |
+| E | `Is_Admin` | `1` para admin ou `0` para membro comum |
+
+*Exemplo de linha para testes:*
+`1 | membro | membro123 | Minha Empresa Corp | 0`
+
+---
+
+### Aba 2: `Leads`
+| Column | Nome do Campo | Descrição |
+|---|---|---|
+| A | `Email` | E-mail do solicitante |
+| B | `Empresa` | Nome da empresa informada no cadastro |
+| C | `Timestamp` | Data/Hora da solicitação |
+
+---
+
+### Aba 3: `Inventario`
+| Column | Nome do Campo | Descrição |
+|---|---|---|
+| A | `ID` | ID do projeto (ex: `proj_1712345678_123`) |
+| B | `User_ID` | ID do usuário proprietário do registro |
+| C | `Username` | Nome de usuário |
+| D | `Empresa` | Nome da empresa do usuário |
+| E | `Project_Data` | Objeto JSON completo da ficha do projeto |
+| F | `Updated_At` | Data/Hora da última atualização |
+
+---
+
+## 2. Instalação e Implantação do Script (Google Apps Script)
+
+1. Na sua Planilha Google, acesse **Extensões > Apps Script**.
+2. Apague qualquer código existente e cole o conteúdo do arquivo `api.gs` localizado nesta pasta.
+3. Salve o projeto no Apps Script dando o nome de `IA-Categorizacao-Backend`.
 4. Clique no botão azul **Implantar > Nova implantação**.
 5. Selecione o tipo **App da Web**.
-6. Configurações:
-   - Descrição: `API B3 Rebalanceamento`
-   - Executar como: `Eu`
-   - Quem tem acesso: `Qualquer pessoa`
-7. Clique em **Implantar**.
-8. **Copie a URL do app da Web** gerada (algo como `https://script.google.com/macros/s/.../exec`).
+6. Ajuste as configurações:
+   - **Descrição:** `API do Sistema de Categorização de IA`
+   - **Executar como:** `Eu` (sua conta Google)
+   - **Quem tem acesso:** `Qualquer pessoa` (ou `Anyone` - **OBRIGATÓRIO** para liberar o acesso ao frontend estático sem solicitar login na conta Google do visitante)
+7. Clique em **Implantar** e autorize os acessos solicitados pela sua conta.
+8. Copie a **URL do App da Web** gerada (formato `https://script.google.com/macros/s/.../exec`).
 
-> ⚠️ **IMPORTANTE:** Toda vez que você fizer uma alteração no código do Apps Script (como adicionar a função de trocar senha), você deve clicar em **Implantar > Gerenciar implantações**, clicar no ícone de lápis (Editar) e selecionar **"Nova Versão"** na lista suspensa de versão. Caso contrário, o Google continuará executando a versão antiga do seu código e você verá erros como "Ação não reconhecida".
+> ⚠️ **Solução para a mensagem "Erro na comunicação com a API do servidor":**
+> - Se a opção **Quem tem acesso** estiver definida como "Apenas eu" ou "Qualquer pessoa com conta do Google", o navegador bloqueará as chamadas e retornará erro de comunicação. Certifique-se de selecionar **"Qualquer pessoa"** (Anyone).
+> - Ao alterar o código `api.gs` ou as configurações de implantação, você **DEVE** criar uma **Nova versão**: vá em **Implantar > Gerenciar implantações**, clique no ícone de lápis ✏️, em *Versão* selecione **Nova versão** e clique em **Implantar**.
 
 ---
 
-## 3. Conexão com o Site
+## 3. Conexão com o Frontend (`app.js`)
 
-1. Abra o arquivo `app.js` na raiz do projeto.
-2. Localize a variável `this.GAS_URL` no início do `constructor`.
-3. Cole a URL que você copiou entre as aspas:
+1. Abra o arquivo `categorias/app.js`.
+2. Localize a propriedade `this.GAS_URL` no construtor da classe `App`.
+3. Substitua pela sua URL:
    ```javascript
-   this.GAS_URL = "SUA_URL_AQUI";
+   this.GAS_URL = "https://script.google.com/macros/s/SUA_URL_AQUI/exec";
    ```
-4. Salve o arquivo e faça o commit/push para o GitHub.
+4. Salve e publique a alteração.
 
 ---
 
-## 4. Migração de Dados (Opcional)
-
-Se você já tinha dados no banco de dados anterior, aqui estão os dados atuais para você copiar e colar na sua planilha:
-
-### Dados para a aba `Users`:
-- `1, admin, admin123, 1`
-- `2, lucas1, senha123, 0`
-
-*(Nota: As senhas originais estavam criptografadas. Para facilitar o seu gerenciamento direto na planilha, o novo sistema utiliza comparação de texto simples. Você pode definir as senhas que desejar diretamente na coluna 'password' da aba Users. Os usuários também podem alterar suas próprias senhas através da Área de Membros no site).*
-
-### Dados para a aba `Portfolios`:
-Você pode copiar o conteúdo JSON dos portfólios existentes se desejar, mas recomendamos que os usuários salvem novamente seus dados após o primeiro login no novo sistema para garantir a sincronização.
+> 💡 **Nota Importante:** Caso realize alterações no código do Apps Script posteriormente, lembre-se de ir em **Implantar > Gerenciar implantações**, clicar no ícone de lápis ✏️ e escolher **"Nova versão"** antes de clicar em Implantar.
